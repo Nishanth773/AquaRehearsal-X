@@ -1,0 +1,105 @@
+{
+  "stage": 3,
+  "title": "AquaRehearsal-X Storm Tolerance Envelope",
+  "station_id": "01474500",
+  "station_name": "Schuylkill River at Philadelphia, PA",
+  "data_period": "2023-01-01 to 2026-09-25",
+  "total_storm_events": 58,
+  "non_overlapping_clean_events": 42,
+  "overlapping_72h_events_flagged": 16,
+  "default_do_threshold_mg_L": 5.0,
+  "operational_risk_limit": 0.2,
+  "supported_data_domain": {
+    "supported_temperature_range_c": [
+      1.0,
+      31.0
+    ],
+    "supported_rainfall_range_mm": [
+      0.0,
+      72.0
+    ],
+    "total_supported_events": 58
+  },
+  "calibration_metrics": {
+    "total_samples": 56,
+    "positive_events_count": 0,
+    "negative_events_count": 56,
+    "operational_risk_limit": 0.2,
+    "brier_score": 0.2821,
+    "true_positives": 0,
+    "false_positives": 22,
+    "false_negatives": 0,
+    "true_negatives": 34,
+    "sensitivity_recall": 1.0,
+    "specificity": 0.607,
+    "precision": 0.0,
+    "f1_score": 0.0,
+    "roc_auc": "UNAVAILABLE_SINGLE_CLASS",
+    "pr_auc": "UNAVAILABLE_SINGLE_CLASS",
+    "reliability_bins": [
+      {
+        "bin_low": 0.0,
+        "bin_high": 0.2,
+        "sample_count": 34,
+        "mean_predicted_prob": 0.011,
+        "empirical_frequency": 0.0
+      },
+      {
+        "bin_low": 0.2,
+        "bin_high": 0.4,
+        "sample_count": 3,
+        "mean_predicted_prob": 0.255,
+        "empirical_frequency": 0.0
+      },
+      {
+        "bin_low": 0.4,
+        "bin_high": 0.6,
+        "sample_count": 1,
+        "mean_predicted_prob": 0.572,
+        "empirical_frequency": 0.0
+      },
+      {
+        "bin_low": 0.6,
+        "bin_high": 0.8,
+        "sample_count": 3,
+        "mean_predicted_prob": 0.652,
+        "empirical_frequency": 0.0
+      },
+      {
+        "bin_low": 0.8,
+        "bin_high": 1.0,
+        "sample_count": 15,
+        "mean_predicted_prob": 0.964,
+        "empirical_frequency": 0.0
+      }
+    ]
+  },
+  "replay_summary": {
+    "total_replayed_events": 58,
+    "do_threshold_mg_L": 5.0,
+    "operational_risk_limit": 0.2,
+    "correct_warnings_tp": 0,
+    "false_alarms_fp": 22,
+    "missed_events_fn": 0,
+    "correct_safes_tn": 36,
+    "sensitivity_recall": 1.0,
+    "specificity": 0.621,
+    "precision": 0.0,
+    "median_lead_time_hours": null,
+    "has_missed_events": false,
+    "notes": "Replay evaluated against DO < 5.0 mg/L criterion with 20% operational risk trigger. Missed events and false alarms are recorded without data fabrication."
+  },
+  "event_bootstrap_uncertainty": {
+    "n_bootstraps": 80,
+    "regime_counts": {
+      "cold_events (<15\u00b0C)": 30,
+      "moderate_events (15-22\u00b0C)": 10,
+      "warm_events (>=22\u00b0C)": 18
+    }
+  },
+  "deliverables": {
+    "static_2d_envelope_figure": "storm_tolerance_envelope_2d_temp_rain.png",
+    "interactive_application": "storm_tolerance_envelope_app.html",
+    "replay_log_csv": "historical_storm_replay.csv"
+  }
+}

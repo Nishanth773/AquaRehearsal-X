@@ -1,0 +1,6 @@
+Intervention,Category,Total Lead Time (h),Target Deadline (h),Time Margin (h),Feasibility Tier,Simulated Min DO (mg/L),DO Gain (mg/L),Projected Risk P(DO<5.0),Primary Constraint
+Baseline (No Action),Status Quo,0.0,3.8,0.0,BASELINE,4.52,0.0,0.9989,Unmitigated storm washoff & deoxygenation
+Temporary In-Stream Aeration,Active Mechanical,5.0,3.8,-1.2,FEASIBILITY_UNCERTAIN,4.78,0.26,0.9968,Requires on-site electrical power or diesel generator refueling logistics.
+Catchment Runoff Reduction,Catchment Source Control,13.0,3.8,-9.2,UNLIKELY_TO_AFFECT,4.62,0.1,0.9987,Requires coordinated municipal dispatch for pre-storm street sweeping and inlet vacuuming.
+Stormwater & CSO Detention,Dynamic Hydraulic Storage,4.5,3.8,-0.7,FEASIBILITY_UNCERTAIN,5.0,0.48,0.9886,Requires functional SCADA telemetry and calibrated hydraulic gate controllers.
+Riparian Buffer Canopy Shading,Long-Term Structural,44521.0,3.8,-44517.2,UNLIKELY_TO_AFFECT,4.73,0.21,0.9975,Land acquisition / riparian easement agreements required.

@@ -1,0 +1,23 @@
+METRIC,STAGE_2_CURRENT,STAGE_2_5_EXTENDED
+Station Identifier,USGS 01474500,USGS 01474500
+Start Timestamp (UTC),2026-04-01 16:00:00+00:00,2023-01-01 05:00:00+00:00
+End Timestamp (UTC),2026-09-28 15:00:00+00:00,2026-09-29 03:00:00+00:00
+Temporal Span (Calendar Days),180.0 days,1366.9 days
+Temporal Span (Years),0.49 years,3.74 years
+Total Hourly Observations,4320,32807
+Dissolved Oxygen Availability (%),99.49%,95.08%
+Water Temperature Availability (%),99.51%,95.09%
+Discharge Availability (%),99.68%,99.87%
+Turbidity Availability (%),66.53%,8.72% (deployed 2026-05)
+Meteorological API Source,None (Decoupled),Open-Meteo Historical Weather API
+Meteorological Exact Model,None,"ECMWF ERA5 Reanalysis (era5, 0.25 deg)"
+Primary Storm Variable,None,rain_mm (liquid precipitation)
+Liquid Rain Valid Observations,0 (0.0%),32683 (99.62%)
+Liquid Rain Missingness (NaN),100.0%,124 (0.38%)
+Liquid Rain Measured Dry Hours (0.0 mm),N/A,28004 (85.36%)
+Liquid Rain Measured Wet Hours (>0.0 mm),N/A,4679 (14.26%)
+Liquid Rain Peak Hourly Rate,N/A,15.5 mm/hr
+Liquid Rain Cumulative Sum,N/A,3826.6 mm
+Total Precipitation Cumulative Sum,N/A,3982.4 mm
+Valid 72h Future Target Windows,4262 (98.7%),30764 (93.8%)
+Seasonal Coverage,Spring-Summer (Single Warm Season),"4 Springs, 4 Summers, 3 Falls, 3 Winters"

@@ -1,0 +1,17 @@
+{
+  "cold": {
+    "conformal_margin": 2.655,
+    "sigma": 0.907,
+    "n_samples": 247
+  },
+  "moderate": {
+    "conformal_margin": 1.737,
+    "sigma": 1.196,
+    "n_samples": 1173
+  },
+  "warm": {
+    "conformal_margin": 1.646,
+    "sigma": 1.291,
+    "n_samples": 2823
+  }
+}

@@ -1,0 +1,137 @@
+{
+  "stage": 2.5,
+  "models": [
+    "Model A (Water-Only)",
+    "Model B (Water + Precipitation)"
+  ],
+  "dataset_rows": 30764,
+  "split_samples": {
+    "train": 21004,
+    "val": 5470,
+    "test": 4264
+  },
+  "features_count": {
+    "model_a": 144,
+    "model_b": 157
+  },
+  "metrics": {
+    "overall": {
+      "model_a": {
+        "model_name": "Model A (Water-Only)",
+        "n_samples": 4264,
+        "mae": 1.184,
+        "rmse": 1.536,
+        "r2": 0.4181,
+        "median_ae": 0.931,
+        "pct_within_0_5_mg_L": 23.31,
+        "pct_within_1_0_mg_L": 53.71,
+        "residual_p10": -1.473,
+        "residual_p25": -0.848,
+        "residual_median_p50": 0.26,
+        "residual_p75": 0.987,
+        "residual_p90": 2.017
+      },
+      "model_b": {
+        "model_name": "Model B (Water + Precipitation)",
+        "n_samples": 4264,
+        "mae": 1.195,
+        "rmse": 1.542,
+        "r2": 0.4132,
+        "median_ae": 0.931,
+        "pct_within_0_5_mg_L": 21.55,
+        "pct_within_1_0_mg_L": 53.99,
+        "residual_p10": -1.62,
+        "residual_p25": -0.866,
+        "residual_median_p50": 0.248,
+        "residual_p75": 0.981,
+        "residual_p90": 1.959
+      }
+    },
+    "storm_periods": {
+      "model_a": {
+        "model_name": "Model A (Storm Periods)",
+        "n_samples": 570,
+        "mae": 0.654,
+        "rmse": 0.752,
+        "r2": 0.3801,
+        "median_ae": 0.699,
+        "pct_within_0_5_mg_L": 35.09,
+        "pct_within_1_0_mg_L": 82.63,
+        "residual_p10": -0.041,
+        "residual_p25": 0.353,
+        "residual_median_p50": 0.698,
+        "residual_p75": 0.911,
+        "residual_p90": 1.098
+      },
+      "model_b": {
+        "model_name": "Model B (Storm Periods)",
+        "n_samples": 570,
+        "mae": 0.651,
+        "rmse": 0.741,
+        "r2": 0.3974,
+        "median_ae": 0.708,
+        "pct_within_0_5_mg_L": 33.16,
+        "pct_within_1_0_mg_L": 82.81,
+        "residual_p10": -0.097,
+        "residual_p25": 0.353,
+        "residual_median_p50": 0.703,
+        "residual_p75": 0.888,
+        "residual_p90": 1.105
+      }
+    },
+    "normal_periods": {
+      "model_a": {
+        "model_name": "Model A (Normal Periods)",
+        "n_samples": 3694,
+        "mae": 1.266,
+        "rmse": 1.623,
+        "r2": 0.3903,
+        "median_ae": 1.014,
+        "pct_within_0_5_mg_L": 21.49,
+        "pct_within_1_0_mg_L": 49.24,
+        "residual_p10": -1.634,
+        "residual_p25": -1.0,
+        "residual_median_p50": -0.058,
+        "residual_p75": 1.027,
+        "residual_p90": 2.18
+      },
+      "model_b": {
+        "model_name": "Model B (Normal Periods)",
+        "n_samples": 3694,
+        "mae": 1.279,
+        "rmse": 1.631,
+        "r2": 0.3845,
+        "median_ae": 1.015,
+        "pct_within_0_5_mg_L": 19.76,
+        "pct_within_1_0_mg_L": 49.54,
+        "residual_p10": -1.694,
+        "residual_p25": -1.016,
+        "residual_median_p50": -0.028,
+        "residual_p75": 1.013,
+        "residual_p90": 2.161
+      }
+    }
+  },
+  "uncertainty_b": {
+    "quantile_80_coverage_pct": 37.08,
+    "quantile_80_width": 1.604,
+    "conformal_80_coverage_pct": 24.84,
+    "conformal_80_width": 1.107
+  },
+  "precipitation_metadata": {
+    "source": "Open-Meteo Historical Weather API",
+    "exact_model_dataset": "ECMWF ERA5 Reanalysis (era5)",
+    "requested_latitude": 39.96779,
+    "requested_longitude": -75.1885,
+    "returned_grid_latitude": 40.0,
+    "returned_grid_longitude": -75.25,
+    "returned_grid_elevation_m": 2.0,
+    "spatial_resolution": "0.25 degree (~25-30 km grid cell)",
+    "temporal_resolution": "1h (hourly)",
+    "units": "millimeters (mm)",
+    "primary_variable": "rain_mm (liquid precipitation, mm)",
+    "secondary_variable": "precipitation_mm (total liquid + solid water equivalent, mm)",
+    "missing_value_convention": "Missing precipitation/rain = NaN; observed dry hour = 0.0 mm. Never convert missing to zero.",
+    "geographic_scope_note": "Precipitation and rain data represent ECMWF ERA5 gridded atmospheric reanalysis estimates at grid cell Lat 40.0\u00b0 N, Lon -75.25\u00b0 W and are NOT equivalent to watershed-average rainfall across the 1,893 sq mi Schuylkill River catchment."
+  }
+}

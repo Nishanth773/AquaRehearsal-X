@@ -1,0 +1,58 @@
+{
+  "stage": 5,
+  "title": "AquaRehearsal-X Field Check: Citizen Observation and Prediction Verification System",
+  "station_id": "01474500",
+  "station_name": "Schuylkill River at Philadelphia, PA",
+  "station_coordinates": {
+    "latitude": 39.96779,
+    "longitude": -75.1885
+  },
+  "watershed_bounds": {
+    "min_latitude": 39.85,
+    "max_latitude": 40.6,
+    "min_longitude": -76.2,
+    "max_longitude": -75.05
+  },
+  "observation_counts": {
+    "total_records": 3,
+    "synthetic_demonstration_records": 3,
+    "verified_records": 2,
+    "pending_review_records": 1
+  },
+  "corroboration_metrics": {
+    "corroborated_count": 2,
+    "contradicted_count": 0,
+    "inconclusive_count": 1,
+    "corroboration_rate_pct": 66.7
+  },
+  "numerical_validation": {
+    "status": "VALIDATED_NUMERICAL_SAMPLE",
+    "sample_count": 2,
+    "mean_absolute_error_mg_L": 0.35,
+    "root_mean_squared_error_mg_L": 0.381,
+    "paired_records": [
+      {
+        "observation_id": "OBS-DEMO-001",
+        "measured_do": 4.85,
+        "predicted_do": 4.65,
+        "error": -0.1999999999999993
+      },
+      {
+        "observation_id": "OBS-DEMO-002",
+        "measured_do": 8.7,
+        "predicted_do": 8.2,
+        "error": -0.5
+      }
+    ]
+  },
+  "deliverables": {
+    "interactive_dashboard": "reports\\stage5\\field_check_dashboard.html",
+    "observations_store": "reports\\stage5\\field_observations.json"
+  },
+  "scientific_verdict": "READY WITH LIMITATIONS",
+  "disclaimers": {
+    "general_disclaimer": "AquaRehearsal-X Field Check is a citizen-science observation and model-verification platform, NOT a substitute for laboratory environmental testing or certified municipal water quality enforcement.",
+    "health_disclaimer": "Human recreational contact risk has NOT been laboratory-assessed unless official certified bacteriological measurements (e.g. E. coli / enterococci) or municipal health department advisories are explicitly cited. Do NOT infer pathogen levels from water appearance, foam, or odor alone. Never enter floodwaters.",
+    "unverified_notice": "Unverified field submissions represent subjective citizen observations and have not yet undergone professional QA/QC verification."
+  }
+}

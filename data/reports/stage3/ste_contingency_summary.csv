@@ -1,0 +1,2 @@
+total_historical_events,events_breaching_5_0_standard,events_breaching_4_0_acute,true_positives_std,false_positives_std,false_negatives_std,true_negatives_std,sensitivity_recall,specificity,precision,f1_score,events_with_deoxygenation_stress,stress_tp,stress_fp,stress_fn,stress_tn,stress_sensitivity,stress_specificity,stress_precision,stress_f1_score,brier_score_std_5_0,time_to_trough_mae_hours,alert_counts
+58,0,0,0,23,0,35,1.0,0.603,0.0,0.0,20,12,11,8,27,0.6,0.711,0.522,0.558,0.3607,14.89,"{'NORMAL': 35, 'EMERGENCY': 18, 'WARNING': 4, 'ADVISORY': 1}"

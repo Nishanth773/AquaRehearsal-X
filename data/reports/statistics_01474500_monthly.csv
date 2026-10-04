@@ -1,0 +1,7 @@
+month,month_name,total_records,dissolved_oxygen_mean,dissolved_oxygen_median,dissolved_oxygen_min,dissolved_oxygen_max,dissolved_oxygen_std,water_temperature_mean,water_temperature_median,water_temperature_min,water_temperature_max,water_temperature_std,discharge_mean,discharge_median,discharge_min,discharge_max,discharge_std,turbidity_mean,turbidity_median,turbidity_min,turbidity_max,turbidity_std
+4,Apr,1407,12.29,12.0,7.6,19.0,1.76,16.37,15.7,12.3,22.5,2.54,1451.33,1270.0,858.0,2660.0,454.48,,,,,
+5,May,1488,10.83,10.7,4.2,19.4,2.38,19.43,18.6,15.4,27.7,2.63,1532.06,1300.0,749.0,6240.0,800.32,5.18,5.25,4.2,6.5,0.55
+6,Jun,1440,10.56,10.2,3.6,19.6,2.75,25.26,25.4,20.6,29.3,1.58,855.99,803.0,452.0,2860.0,340.36,5.8,5.5,3.0,12.2,1.44
+7,Jul,1458,10.89,10.0,4.8,22.8,3.88,27.79,27.2,25.9,32.9,1.47,780.84,579.0,307.0,3990.0,543.96,4.69,4.6,2.4,10.5,1.31
+8,Aug,1488,7.55,7.1,5.3,15.3,1.5,26.61,26.6,23.2,30.3,1.67,1266.69,975.0,413.0,6940.0,1015.61,6.25,5.0,1.9,24.1,3.75
+9,Sep,1327,8.31,8.3,6.1,14.5,1.07,23.46,24.5,16.9,26.7,2.59,1522.9,975.0,472.0,5410.0,1204.33,5.19,4.6,2.8,13.3,1.63

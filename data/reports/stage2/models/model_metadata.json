@@ -1,0 +1,83 @@
+{
+  "project": "AquaRehearsal-X",
+  "stage": 2,
+  "component": "72-Hour Dissolved Oxygen Forecasting Engine",
+  "station_id": "01474500",
+  "station_name": "Schuylkill River at Philadelphia, PA",
+  "temporal_resolution": "1h",
+  "target": {
+    "target_name": "target_min_do_72h",
+    "target_description": "Minimum observed dissolved oxygen (mg/L) during the future window (t, t + 72 hours]",
+    "forecast_horizon_hours": 72,
+    "min_valid_future_ratio": 0.8,
+    "min_valid_future_hours": 58
+  },
+  "split_dates": {
+    "train_start": "2026-04-01 16:00:00+00:00",
+    "train_end": "2026-07-20 00:00:00+00:00",
+    "val_start": "2026-07-20 00:00:00+00:00",
+    "val_end": "2026-08-25 00:00:00+00:00",
+    "test_start": "2026-08-25 00:00:00+00:00",
+    "test_end": "2026-09-25 15:00:00+00:00"
+  },
+  "random_seed": 42,
+  "sample_counts": {
+    "total_valid_samples": 4262,
+    "train_samples": 2624,
+    "val_samples": 864,
+    "test_samples": 760
+  },
+  "metrics_test": {
+    "lightgbm": {
+      "model_name": "LightGBM Regressor (Stage 2 Main ML)",
+      "n_samples": 760,
+      "mae": 0.662,
+      "rmse": 0.78,
+      "r2": -0.2491,
+      "median_ae": 0.684,
+      "pct_within_0_5_mg_L": 38.42,
+      "pct_within_1_0_mg_L": 75.53,
+      "residual_p10": -0.351,
+      "residual_p25": 0.071,
+      "residual_median_p50": 0.592,
+      "residual_p75": 0.956,
+      "residual_p90": 1.177
+    },
+    "baseline_a_persistence": {
+      "model_name": "Baseline A (Persistence: Current DO)",
+      "n_samples": 759,
+      "mae": 0.871,
+      "rmse": 1.275,
+      "r2": -2.3315,
+      "median_ae": 0.6,
+      "pct_within_0_5_mg_L": 47.17,
+      "pct_within_1_0_mg_L": 67.85,
+      "residual_p10": 0.0,
+      "residual_p25": 0.2,
+      "residual_median_p50": 0.6,
+      "residual_p75": 1.2,
+      "residual_p90": 2.11
+    },
+    "baseline_b_linear": {
+      "model_name": "Baseline B (Linear: DO + Temp + Season)",
+      "n_samples": 760,
+      "mae": 3.537,
+      "rmse": 3.599,
+      "r2": -25.559,
+      "median_ae": 3.456,
+      "pct_within_0_5_mg_L": 0.0,
+      "pct_within_1_0_mg_L": 0.0,
+      "residual_p10": 2.766,
+      "residual_p25": 3.008,
+      "residual_median_p50": 3.456,
+      "residual_p75": 3.971,
+      "residual_p90": 4.407
+    }
+  },
+  "uncertainty_coverage": {
+    "quantile_80_empirical_coverage_pct": 42.37,
+    "quantile_80_mean_width_mg_L": 1.024,
+    "conformal_80_empirical_coverage_pct": 100.0,
+    "conformal_80_mean_width_mg_L": 3.91
+  }
+}

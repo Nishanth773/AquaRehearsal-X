@@ -1,0 +1,41 @@
+{
+  "stage": 4,
+  "title": "AquaRehearsal-X Action Window and Intervention Rehearsal Engine",
+  "station_id": "01474500",
+  "station_name": "Schuylkill River at Philadelphia, PA",
+  "stage3_readiness": "READY WITH LIMITATIONS",
+  "active_threshold_mg_L": 5.0,
+  "operational_risk_limit": 0.2,
+  "historical_events_audited": 58,
+  "historical_nadir_timing": {
+    "median_hours": 7.0,
+    "p25_hours": 1.8,
+    "p75_hours": 14.5
+  },
+  "primary_case_study": {
+    "label": "July Summer Flash Storm Case Study (T=26.5\u00b0C, Rain=42mm)",
+    "baseline_risk_prob": 0.9989,
+    "estimated_action_window_hours": 3.8,
+    "crossing_probabilities": {
+      "6h": 0.2311,
+      "12h": 0.569,
+      "24h": 0.9989,
+      "48h": 0.9989,
+      "72h": 0.9989
+    }
+  },
+  "implemented_interventions": [
+    "temporary_aeration",
+    "runoff_reduction",
+    "stormwater_detention",
+    "riparian_shading"
+  ],
+  "deliverables": {
+    "interactive_app": "reports\\stage4\\intervention_rehearsal_app.html",
+    "trajectory_figure": "reports\\stage4\\stage4_72h_intervention_trajectories.png",
+    "feasibility_gantt_figure": "reports\\stage4\\stage4_feasibility_lead_time_gantt.png",
+    "comparison_matrix_csv": "reports\\stage4\\stage4_scenario_comparison.csv"
+  },
+  "scientific_verdict": "READY WITH LIMITATIONS",
+  "scientific_disclaimer": "Simulations are derived from generalized Streeter-Phelps oxygen transfer equations. Because no controlled in-situ field aeration trials were performed at USGS 01474500 during 2023-2026, absolute quantitative outcomes have NOT been empirically validated against real-world stream treatment experiments."
+}

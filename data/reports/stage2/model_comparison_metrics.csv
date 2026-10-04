@@ -1,0 +1,4 @@
+MODEL,MAE (mg/L),RMSE (mg/L),R²,Median AE (mg/L),Within +/-0.5 mg/L (%),Within +/-1.0 mg/L (%),NUMBER OF TEST SAMPLES,DISTURBANCE-EVENT MAE (TEST)
+Baseline A (Persistence: Current DO),0.871,1.275,-2.3315,0.6,47.17,67.85,759,0.817
+Baseline B (Linear: DO + Temp + Season),3.537,3.599,-25.559,3.456,0.0,0.0,760,3.717
+LightGBM Regressor (Stage 2 Main ML),0.662,0.78,-0.2491,0.684,38.42,75.53,760,0.94

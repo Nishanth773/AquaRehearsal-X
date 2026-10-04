@@ -1,0 +1,4 @@
+season,record_count,dissolved_oxygen_mean,dissolved_oxygen_median,dissolved_oxygen_p10,dissolved_oxygen_p90,water_temperature_mean,water_temperature_median,water_temperature_p10,water_temperature_p90,discharge_mean,discharge_median,discharge_p10,discharge_p90,turbidity_mean,turbidity_median,turbidity_p10,turbidity_p90
+Spring,2895,11.54,11.4,9.2,14.4,17.94,17.8,14.4,22.1,1492.82,1270.0,975.0,2240.0,5.18,5.25,4.39,5.72
+Summer,4386,9.64,8.7,6.5,14.3,26.56,26.6,24.5,28.9,970.37,776.0,472.0,1640.0,5.59,5.0,3.4,8.2
+Fall,1327,8.31,8.3,7.1,9.6,23.46,24.5,18.63,25.5,1522.9,975.0,556.0,3780.0,5.19,4.6,3.7,8.0
