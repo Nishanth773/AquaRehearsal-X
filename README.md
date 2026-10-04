@@ -1,401 +1,451 @@
 # AquaRehearsal-X
 
-**Early-Warning and Resilience-Planning Platform for Freshwater Streams**  
+**An Uncertainty-Aware Freshwater Resilience Platform for Storm-Risk Forecasting and Intervention Rehearsal**  
 *OneAquaHealth IEEE Global Hackathon 2026 — Track 6: Resilience Informatics: Enable Early Warning & Resilience Planning*
 
----
-
-## Project Vision & Research Question
-AquaRehearsal-X addresses a critical water security question:
-> **"How much storm can this stream tolerate before severe dissolved-oxygen depletion, how likely is an incoming storm to cross that boundary, how much time remains to act, and which interventions could potentially increase resilience?"**
-
-To ensure scientific defensibility, this platform is engineered in strict phased stages:
-- **Stage 1: Real Data Foundation (Completed)** — Discovery, ingestion, and rigorous audit of USGS water quality sensors across 8 candidate monitoring stations.
-- **Stage 2: 72-Hour Dissolved Oxygen Forecasting Engine (Completed)** — Baseline models, LightGBM quantile regression, split conformal calibration, and leakage prevention.
-- **Stage 2.5: Historical Depth + Real Precipitation Upgrade (Completed & Validated)** — Multi-year record extension (2023–2026, 32,807 hours), authoritative ECMWF ERA5 hourly liquid rain (`rain_mm`) integration, Model A vs Model B testing, and 10 publication-grade scientific figures.
-- **Stage 3: Storm Tolerance Envelope & Early Warning (Completed & Validated)** — Dynamic multi-dimensional resilience boundaries, thermal & antecedent moisture conditioning, boundary-crossing probability ($P_{\text{cross}}$), time-to-trough operational action windows, 8 publication-grade scientific figures, and 58 automated tests.
-- **Stage 4: Action Window & Intervention Rehearsal Engine (Completed & Validated)** — Empirical action-window bounds, continuous Streeter-Phelps oxygen balance simulation across 4 intervention archetypes (Aeration, Runoff Reduction, Detention, Shading), strict time-feasibility filtering, anti-ranking compliance, interactive HTML platform, and 67 automated tests.
-- **Stage 5: Field Check & Citizen Verification (Completed & Validated)** — Structured 4-tier field observation submission pipeline, privacy-first coordinate coarsening (~1.1 km), automated quality assurance, 15-minute duplicate hash detection, spatio-temporal forecast matching ($\le 20\text{ km}$, $\le 72\text{h}$), human-in-the-loop review workflow, dual-track validation ledger, and 77 automated tests.
-- **Stage 6: Full System Integration (Completed & Validated)** — End-to-end mission control platform ([`data/reports/stage6/mission_control.html`](file:///c:/Users/Nishanth/OneDrive/Desktop/AquaRehearsal-X/data/reports/stage6/mission_control.html)), live 9-subsystem observability monitor, strict historical storm replay (Event 54 - August 2026), 3-5 minute guided hackathon demo mode, and 89 automated tests (100% pass rate).
-- **Stage 7: Final Hackathon Readiness (Completed & Validated)** — Visual hierarchy refinement with Storm Tolerance Envelope as visual centerpiece, 7-step guided 3-minute hackathon demo script, visible scientific limitations panel, comprehensive judge-facing technical summary, reproducible offline demo environment, and presentation collateral ([`docs/STAGE7_FINAL_READINESS.md`](file:///c:/Users/Nishanth/OneDrive/Desktop/AquaRehearsal-X/docs/STAGE7_FINAL_READINESS.md), [`docs/HACKATHON_PRESENTATION.md`](file:///c:/Users/Nishanth/OneDrive/Desktop/AquaRehearsal-X/docs/HACKATHON_PRESENTATION.md)).
+[![Test Suite](https://img.shields.io/badge/pytest-89%20passed%20(100%25)-brightgreen.svg)](#testing-suite--evolution)
+[![Python Version](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue.svg)](#installation--quick-start)
+[![USGS Station](https://img.shields.io/badge/USGS%20NWIS-01474500%20(Philadelphia%2C%20PA)-informational.svg)](#official-data-sources--provenance)
+[![Weather Telemetry](https://img.shields.io/badge/ECMWF%20ERA5-Hourly%20Liquid%20Rainfall-orange.svg)](#official-data-sources--provenance)
+[![Deployment](https://img.shields.io/badge/Mission%20Control-Standalone%20HTML%20(Offline%20Ready)-success.svg)](#interactive-web-deliverables)
 
 ---
 
-## Scientific Integrity Mandate
-In strict adherence to hackathon integrity standards:
-- **Zero Fabrication:** We **never** fabricate environmental observations, rainfall values, dissolved oxygen (DO) measurements, station metadata, missing data, storm events, model accuracy metrics, scientific thresholds, intervention effects, or API responses.
-- **Unavailable Data Transparency:** If a parameter is not monitored or an API endpoint is unavailable, it is reported explicitly as `UNAVAILABLE` or `INSUFFICIENT`.
-- **Synthetic Test Isolation:** Synthetic datasets exist **exclusively inside automated software unit test fixtures** (`tests/`) and are explicitly labeled `TEST DATA`.
-- **Precipitation Missingness Rule:** Missing precipitation remains strictly NaN (`missing = NaN`, `dry hour = 0.0 mm`). No silent zero-imputation is permitted.
-- **Geographic Representation Boundary:** Reanalysis precipitation represents point/grid estimates at monitoring coordinates (Lat 40.0° N, Lon -75.25° W) and is NOT equivalent to catchment-average rainfall.
+AquaRehearsal-X is an open-source, uncertainty-aware decision-support platform designed to help watershed managers, municipal authorities, and environmental response teams anticipate and rehearse responses to acute dissolved oxygen (DO) depletion in urban freshwater streams before storm disturbance occurs. By uniting continuous stream telemetry from the United States Geological Survey (USGS), authoritative hourly meteorological reanalysis from ECMWF ERA5, leakage-free machine-learning forecasting, empirical hydrodynamic response latency distributions, and continuous Streeter-Phelps intervention mass-balance simulation, the platform translates raw environmental data into an operational **Storm Tolerance Envelope (STE)**. Rather than monitoring ecological degradation retrospectively, AquaRehearsal-X enables proactive scenario rehearsal within calibrated logistical lead times.
+
+* **GitHub Repository:** [https://github.com/Nishanth773/AquaRehearsal-X](https://github.com/Nishanth773/AquaRehearsal-X)  
+* **Target Monitoring Station:** USGS `01474500` (Schuylkill River at Philadelphia, PA; 1,893 mi² drainage basin)  
+* **Primary Interactive Interface:** Standalone offline Mission Control platform at [`data/reports/stage6/mission_control.html`](data/reports/stage6/mission_control.html)
 
 ---
 
-## Directory Structure
+## Visual Centerpiece & Project Preview
 
-```text
-AquaRehearsal-X/
-│
-├── data/
-│   ├── raw/                  # Unaltered raw API responses (with provenance)
-│   ├── processed/            # Cleaned, standardized time series (native, 1h, 1d)
-│   └── reports/              # Scientific reports and CSV evaluations
-│       ├── plots/            # Publication-grade real-data visualizations
-│       ├── station_candidates.csv
-│       ├── data_quality_report.csv
-│       ├── candidate_storm_events.csv
-│       ├── statistics_01474500_overall.csv
-│       ├── statistics_01474500_monthly.csv
-│       ├── statistics_01474500_seasonal.csv
-│       └── DATA_FOUNDATION_REPORT.md
-│
-├── src/
-│   ├── data/                 # Ingestion, cleaning, resampling, discovery
-│   │   ├── usgs_client.py    # USGS REST API client with provenance & caching
-│   │   ├── cleaner.py        # Boundary checking & audit logging
-│   │   ├── resampler.py      # Multi-scale temporal aggregation
-│   │   └── discovery.py      # Multi-station discovery & evaluation
-│   ├── analysis/             # Statistics, quality, disturbance, plotting
-│   │   ├── quality.py        # Missingness & co-occurrence analyzer
-│   │   ├── statistics.py     # Parametric, non-parametric, seasonal stats
-│   │   ├── disturbance.py    # Candidate storm disturbance detection
-│   │   └── plotting.py       # Publication-ready matplotlib visualizations
-│   ├── config/               # Transparent configurations & thresholds
-│   │   └── settings.py
-│   ├── features/             # Future ML feature generation interfaces
-│   │   └── feature_engineering.py
-│   ├── weather/              # Weather & precipitation interface architecture
-│   │   └── weather_interface.py
-│   ├── utils/                # Standardized logger
-│   │   └── logger.py
-│   └── pipeline.py           # Master reproducible pipeline orchestrator
-│
-├── tests/                    # Automated pytest suite (labeled test fixtures)
-│   ├── test_usgs_client.py
-│   ├── test_cleaner.py
-│   ├── test_resampler.py
-│   ├── test_quality.py
-│   └── test_disturbance.py
-│
-├── requirements.txt          # Python dependencies
-├── DATA_FOUNDATION_REPORT.md # Top-level copy of the scientific report
-├── README.md                 # Project documentation
-└── .gitignore
+The visual centerpiece of AquaRehearsal-X is the **2D Storm Tolerance Envelope (STE)**, which projects non-linear ecological safe boundaries directly across the environmental phase space of pre-storm water temperature and incoming 24-hour storm rainfall:
+
+![Storm Tolerance Envelope 2D Phase Space](data/reports/stage3/storm_tolerance_envelope_2d_temp_rain.png)
+*Figure 1: The Storm Tolerance Envelope (STE) mapping pre-storm water temperature against incoming 24-hour storm rainfall. The dynamic curve reflects thermodynamic solubility contraction (Benson-Krause) and temperature-accelerated microbial kinetics, establishing critical rainfall allowances before regulatory standards ($\tau = 5.0\text{ mg/L}$ and $4.0\text{ mg/L}$) are threatened. Overlaid points represent cataloged historical storm disturbance events.*
+
+```
++----------------------------------------------------------------------------------------------------+
+|                                    PROJECT SCREENSHOT GALLERY                                      |
++----------------------------------------------------------------------------------------------------+
+| [Screenshot Placeholder: Mission Control Dashboard]                                                |
+| Path: docs/images/mission_control_overview.png                                                      |
+| Description: The unified 9-subsystem mission control interface displaying real-time stream status, |
+| 72h minimum DO forecast trajectory, 2D STE canvas, action-window timer, and One Health metrics.    |
+| (To insert: Launch data/reports/stage6/mission_control.html, capture 1920x1080, save to path)      |
++----------------------------------------------------------------------------------------------------+
+| [Screenshot Placeholder: Historical Storm Replay - Event 54]                                       |
+| Path: docs/images/historical_replay_event54.png                                                    |
+| Description: Forensic reconstruction of the August 5, 2026 severe storm at t0, contrasting the     |
+| LightGBM prediction (6.05 mg/L) against naive persistence (7.10 mg/L) and observed nadir (5.65).   |
+| (To insert: Click "Replay: August 2026 Storm" in mission control, capture modal, save to path)    |
++----------------------------------------------------------------------------------------------------+
+| [Screenshot Placeholder: Intervention Rehearsal & Feasibility Gantt]                               |
+| Path: docs/images/intervention_rehearsal_gantt.png                                                 |
+| Description: Simulated 72h oxygen balance recovery curves across 4 archetypes (diffused aeration,  |
+| runoff detention, CSO storage, shading) alongside logistical lead-time feasibility filtering.     |
+| (To insert: Navigate to the Rehearsal card in mission control, toggle Aeration, capture view)      |
++----------------------------------------------------------------------------------------------------+
+| [Video Demonstration Placeholder: 3-Minute Guided Walkthrough]                                     |
+| Link: docs/videos/AquaRehearsal_X_Demo_Walkthrough.mp4 (or verified hosting link)                   |
+| Description: Screen recording following the 7-step guided hackathon tour in STAGE7_FINAL_READINESS.|
++----------------------------------------------------------------------------------------------------+
 ```
 
 ---
 
-## Installation & Environment Setup
+## The Problem: Storm-Driven Hypoxia in Urban Streams
+
+Urban freshwater corridors are acutely vulnerable to sudden, severe dissolved oxygen depletion during convective summer storms and intense precipitation events:
+
+1. **Thermal Urban Runoff:** Precipitation striking sun-baked impervious surfaces (asphalt, concrete, rooftops) discharges high-temperature runoff into receiving waters. Because warm water has a fundamentally lower thermodynamic gas solubility ceiling (governed by the Benson-Krause formulation), the initial oxygen buffer above regulatory thresholds shrinks rapidly.
+2. **Combined Sewer Overflows (CSOs) & Organic Washoff:** Storm pulses overwhelm combined municipal drainage systems and flush labile organic detritus, road sediment, and nutrients directly into the stream, triggering acute surges in Carbonaceous Biochemical Oxygen Demand (CBOD).
+3. **Hydrodynamic Sediment Resuspension:** Sudden discharge surges scour benthic stream beds, resuspending organic sediment and exerting intense Sediment Oxygen Demand (SOD).
+4. **The Monitoring Blind Spot:** Conventional telemetry systems (such as in-stream USGS water quality sensors) provide high-precision instantaneous records, but their function is inherently **retrospective**. They document oxygen crashes *while or after* they occur. Standard operational dashboards do not:
+   - Provide forward-looking multi-day minimum forecasts with calibrated uncertainty bounds.
+   - Establish state-dependent physical safe boundaries indicating how much rainfall the stream can absorb given its current temperature and baseflow.
+   - Estimate operational action windows (time-to-nadir) to indicate whether emergency interventions can be mobilized in time.
+   - Allow managers to simulate and rehearse response scenarios prior to storm arrival.
+
+---
+
+## Our Solution: An Integrated Resilience Informatics Workflow
+
+AquaRehearsal-X bridges the gap between environmental sensing, probabilistic machine learning, and operational action. The platform establishes an end-to-end decision-support workflow:
+
+```mermaid
+flowchart LR
+    A["1. Real Telemetry<br/>(USGS 01474500 + ERA5)"] --> B["2. 72h Forecaster<br/>(LightGBM Model B)"]
+    B --> C["3. Tolerance Envelope<br/>(2D STE Phase Space)"]
+    C --> D["4. Action Window<br/>(Empirical P10/P50/P90)"]
+    D --> E["5. Intervention Rehearsal<br/>(Streeter-Phelps Mass Balance)"]
+    F["Citizen Field Check<br/>(Segregated & Privacy-Fuzzed)"] -.->|Contextual Ground-Truth| G["6. Mission Control<br/>(Unified Decision Platform)"]
+    E --> G
+```
+
+1. **Continuous Data Ingestion & Provenance:** Regularly polls continuous in-stream telemetry (DO, temperature, discharge, turbidity) from USGS NWIS and hourly meteorological reanalysis (`rain_mm`, precipitation) from ECMWF ERA5.
+2. **Leakage-Free Predictive Forecasting:** Generates site-specific 72-hour future minimum dissolved oxygen forecasts using a LightGBM gradient-boosted decision tree with non-crossing quantile bounds ($q_{10}, q_{50}, q_{90}$) and inductive split conformal prediction.
+3. **Storm Tolerance Envelope (STE):** Maps current thermal and antecedent conditions against incoming storm rainfall to determine remaining assimilative headroom, critical rainfall depths ($R_{\text{crit}}$), and boundary-crossing risk probabilities ($P_{\text{cross}}$).
+4. **Action-Window Estimation:** Characterizes operational lead time to the oxygen nadir ($t_{\text{trough}}$) using empirical lag distributions derived from 58 cataloged historical storm events.
+5. **Intervention Rehearsal Simulation:** Rehearses 4 response archetypes using continuous Streeter-Phelps mass-balance kinetics, filtering options through a logistical feasibility gate based on mobilization lead times.
+6. **Citizen Field Verification & One Health Communication:** Integrates privacy-preserving citizen observations into an isolated validation ledger, providing qualitative ground-truthing while maintaining strict boundaries regarding unassessed microbial pathogen risks.
+
+---
+
+## Key Innovation: The Storm Tolerance Envelope (STE)
+
+Rather than claiming the invention of established machine learning algorithms or classical limnological equations, AquaRehearsal-X's innovation lies in its **integrated decision-support architecture centered on the Storm Tolerance Envelope (STE)**.
+
+### 1. Dynamic Resilience Boundary vs. Static Regulatory Limits
+Standard environmental regulations specify static numerical criteria (e.g., PA Code Title 25 Chapter 93 specifies a minimum daily average of $5.0\text{ mg/L}$ and instantaneous minimum of $4.0\text{ mg/L}$ for Warm Water Fishes). However, an aquatic ecosystem's ability to withstand a storm is dynamic:
+- In cold spring waters ($T_{\text{water}} \le 12^\circ\text{C}$), the river's high baseline saturation ($>11.0\text{ mg/L}$) provides substantial buffer capacity, tolerating over $50\text{ mm}$ of rainfall without approaching regulatory distress.
+- During peak summer heat ($T_{\text{water}} \ge 26^\circ\text{C}$), saturation drops below $8.1\text{ mg/L}$, bacterial respiration accelerates ($Q_{10} \approx 2.15$), and assimilative tolerance shrinks. Under these conditions, a modest $21\text{--}25\text{ mm}$ storm can rapidly drive dissolved oxygen into critical impairment zones.
+
+The STE formulates an empirical 2D safe-boundary function:
+$$R_{\text{safe}} = f(T_{\text{water}}, \text{Baseflow}, API_{72h})$$
+This maps ambient stream temperature and antecedent soil moisture directly to the critical rainfall threshold ($R_{\text{crit}}$) that exhausts assimilative capacity.
+
+### 2. Domain Support & Guardrail Enforcement
+To prevent ungrounded extrapolation, the STE calculates the **Delaunay convex hull** of all observed historical storm states ($1.0^\circ\text{C} \le T \le 31.0^\circ\text{C}$, $0 \le R \le 55\text{ mm}$). If user inputs exceed historical bounds, the engine activates an out-of-distribution guardrail, flagging the scenario as unverified and refusing ungrounded safety predictions.
+
+### 3. Closed-Loop Synthesis
+By coupling the STE directly with empirical time-to-nadir distributions and Streeter-Phelps rehearsal, the platform transitions water quality management from **descriptive monitoring** to **predictive operational rehearsal**.
+
+---
+
+## System Architecture
+
+AquaRehearsal-X is structured into decoupled, modular subsystems ensuring strict data isolation, zero data leakage, and offline reproducibility:
+
+```mermaid
+graph TD
+    subgraph Data Layer
+        A1["USGS NWIS REST API (Station 01474500)"] --> A3["Data Ingestion & Quality Engine (cleaner.py)"]
+        A2["ECMWF ERA5 Reanalysis (Open-Meteo)"] --> A3
+        A3 --> A4["Multi-Scale Resampler & Feature Suite (156 Causal Features)"]
+    end
+
+    subgraph Modeling & Uncertainty
+        A4 --> B1["LightGBM Regressor (Model B: Water + Rain)"]
+        B1 --> B2["Quantile Regressors (q10, q50, q90)"]
+        B1 --> B3["Inductive Split Conformal Calibrator (90% Interval)"]
+        A4 --> B4["Persistence & Seasonal Ridge Baselines"]
+    end
+
+    subgraph Resilience & Rehearsal Core
+        B1 --> C1["Storm Tolerance Envelope Engine (envelope_engine.py)"]
+        B2 --> C1
+        B3 --> C1
+        C1 --> C2["Action Window Estimator (action_window.py; P10/P50/P90)"]
+        C2 --> C3["Intervention Rehearsal Engine (rehearsal_engine.py)"]
+        C3 --> C4["Logistical Feasibility Gate (Lead-Time vs P10)"]
+    end
+
+    subgraph Community & Presentation
+        D1["Citizen Field Submissions"] --> D2["4-Tier Segregation & Privacy Coarsening (~1.1 km)"]
+        D2 --> D3["Dual-Track Validation Ledger (Anti-Labeling Rule)"]
+        C1 --> E1["Mission Control Application (mission_control.html)"]
+        C4 --> E1
+        D3 --> E1
+    end
+```
+
+### Component Roles & Interfaces
+* **Data Layer (`src/data/`, `src/features/`):** Ingests raw JSON payloads, writes immutable provenance logs in `data/raw/`, cleans physical boundary violations, resamples 30-minute telemetry to regularized 1-hour intervals, and generates 156 strictly backward-looking causal features.
+* **Forecasting Engine (`src/models/`):** Houses LightGBM Model B, pinball-loss quantile regressors, split-conformal calibrators, and baseline comparison models.
+* **Resilience Core (`src/ste/`, `src/rehearsal/`):** Calculates dynamic critical rainfall boundaries, thermal shrinkage curves, boundary-crossing probabilities ($P_{\text{cross}}$), empirical time-to-nadir percentiles, and numerical Streeter-Phelps mass-balance curves across 4 intervention archetypes.
+* **Field Check Subsystem (`src/field_check/`):** Ingests citizen observations, strips EXIF metadata, hashes duplicate reports within 15-minute intervals, coarsens coordinates to 2 decimal places (~1.1 km), and logs records into an isolated validation ledger.
+* **Interface Layer (`data/reports/stage6/mission_control.html`):** A standalone, single-file HTML/CSS/JavaScript dashboard requiring zero external libraries or network access, providing live telemetry KPIs, interactive STE phase-space canvases, intervention rehearsal sliders, and historical storm replay.
+
+---
+
+## Technical Implementation
+
+### 1. Official Data Sources & Provenance
+* **Stream Telemetry:** USGS National Water Information System (NWIS) Instantaneous Values API (`https://waterservices.usgs.gov/nwis/iv/`).
+  * Station: `01474500` (Schuylkill River at Philadelphia, PA; drainage area: 1,893 mi²; Lat: 39.96779° N, Lon: -75.18850° W).
+  * Ingested Parameters: Dissolved Oxygen (`00300`, mg/L), Water Temperature (`00010`, °C), Streamflow Discharge (`00060`, cfs), Gage Height (`00065`, ft), Turbidity (`63680`, FNU; instrumented May 2026).
+* **Atmospheric Telemetry:** ECMWF ERA5 Atmospheric Reanalysis via Open-Meteo Historical Weather API.
+  * Extracted Grid Cell: Lat 40.0° N, Lon -75.25° W (0.25° grid resolution, ~25–30 km cell).
+  * Extracted Variables: `rain_mm` (liquid precipitation; primary storm variable), `precipitation_mm` (total liquid + solid water equivalent).
+  * Missingness Convention: Strict adherence to $\text{missing} \equiv \text{NaN}$ and $\text{dry hour} \equiv 0.0\text{ mm}$. No silent zero-imputation is permitted.
+  * Spatial Caveat: Reanalysis rainfall represents point/grid estimates at the outlet and is not equivalent to catchment-average rainfall across the entire 1,893 mi² basin.
+
+### 2. Multi-Year Dataset & Preprocessing
+* **Temporal Scope:** 3.74 continuous calendar years (January 1, 2023 to September 29, 2026 UTC).
+* **Data Volume:** 32,807 hourly timesteps; 30,764 valid 72-hour forecast windows (93.8% target validity).
+* **Cleaning & Standardization:** Native 30-minute sensor telemetry is regularized to 1-hour timestamps using mean pooling to suppress optical sensor scintillation while preserving diurnal photochemical oscillations and runoff crests.
+
+### 3. Forecasting Methodology & Leakage Prevention
+* **Forecast Target:** 72-hour future minimum dissolved oxygen concentration:
+  $$\text{TARGET}(t) = \min_{\tau \in (0, 72\text{h}]} \text{DO}(t + \tau)$$
+  Timestamp $t$ is strictly excluded from the future target window. Windows with $<80\%$ valid observations ($\ge 58\text{ valid hours}$) are masked as NaN.
+* **Feature Engineering (156 Features):** Lagged shifts ($t-1\text{h}$ to $t-72\text{h}$), backward rolling statistics (min, max, mean, std over $6\text{h}$ to $72\text{h}$ with `closed='right'`), Benson-Krause theoretical saturation, discharge surge ratios, and antecedent precipitation indices (`antecedent_rain_7d`, `rain_roll_72h`).
+* **Leakage Verification:** Automated future-mutation tests scramble all data rows for $t > t_0$ and prove that pre-event feature vectors remain bit-for-bit identical ($max\_diff = 0.0$).
+* **Chronological Split:** Zero random shuffling. Train (Jan 2023–Jun 2025, 21,004 hrs) $\to$ Validation (Jul 2025–Mar 2026, 5,470 hrs) $\to$ Test (Apr 2026–Sep 2026, 4,264 hrs).
+
+### 4. Uncertainty Quantification: Quantiles vs. Conformal Prediction
+AquaRehearsal-X implements two distinct uncertainty formulations:
+* **Quantile Regression ($q_{10}, q_{50}, q_{90}$):** Trained with asymmetric pinball loss. Quantile models adapt conditionally to local feature states (conditional heteroscedasticity), producing narrower intervals during stable baseflow and wider intervals during storms. Post-hoc monotonic sorting guarantees non-crossing bounds ($q_{10} \le q_{50} \le q_{90}$). *Limitation:* Quantile bounds lack finite-sample coverage guarantees and empirically under-covered during seasonal transitions (37%–42% empirical coverage vs. 80% nominal).
+* **Inductive Split Conformal Prediction:** Calibrated on held-out validation residuals $s_i = |y_i - \hat{y}_i|$. Guarantees distribution-free, finite-sample marginal coverage under the exchangeability assumption. On the validation set, the calibrated margin was $\pm 1.955\text{ mg/L}$ (90% nominal interval $[4.10, 8.01]\text{ mg/L}$ for a 6.05 mg/L forecast).
+* **Thermally Stratified Calibration:** In Stage 3, to resolve seasonal coverage imbalances, conformal scores were stratified into Cold ($<15^\circ\text{C}$), Moderate ($15\text{--}22^\circ\text{C}$), and Warm ($\ge 22^\circ\text{C}$) regimes.
+
+### 5. Storm Tolerance Envelope & Risk Surface
+* **Deoxygenation Formulation:**
+  $$\Delta \text{DO}_{\text{depletion}} = \left[ \left(1 - e^{-R_{\text{eff}} / k_R}\right)\Delta_{R,\max} + \ln\left(1 + (S_Q - 1)\right) \beta_Q \right] \cdot \Theta(T_{\text{water}})$$
+  where $R_{\text{eff}} = R_{\text{storm}} \cdot \gamma_{\text{soil}}(API_{72h})$, $k_R = 28.0\text{ mm}$, $\Delta_{R,\max} = 2.85\text{ mg/L}$, $\beta_Q = 0.45\text{ mg/L}$, and $\Theta(T_{\text{water}}) = 1.0 + 1.15 \cdot \max\left(0, \frac{T - 15.0}{10.0}\right)$.
+* **Critical Rainfall Inversion ($R_{\text{crit}}$):** Inverts the envelope to find the maximum storm rainfall depth before expected minimum DO crosses standard protection ($5.0\text{ mg/L}$), acute distress ($4.0\text{ mg/L}$), or severe hypoxia ($2.0\text{ mg/L}$).
+* **Crossing Probabilities ($P_{\text{cross}}$):** Evaluated via Gaussian dispersion over calibrated thermal error distributions:
+  $$P_{\text{cross}}(\tau) = \Phi\left(\frac{\tau - \hat{y}}{\sigma(T)}\right)$$
+
+### 6. Action Window & Intervention Modeling
+* **Empirical Action Window:** Derived from the distribution of `observed_time_to_trough_h` across 58 cataloged historical storm disturbances at USGS 01474500 ($P_{10} = 6.5\text{h}$, $P_{50} = 10.0\text{h}$, $P_{90} = 18.0\text{h}$).
+* **Streeter-Phelps Oxygen Balance Solver:** Numerically integrated across 72 hours ($\Delta t = 0.25\text{h}$):
+  $$\frac{dC}{dt} = K_a(T)(C_s(T) - C(t)) - K_d(T)L(t) - SOD(T) + R_{\text{aeration}}(t)$$
+  $$\frac{dL}{dt} = -K_r(T)L(t) + W_{\text{storm}}(t)$$
+* **Four Rehearsed Archetypes:**
+  1. *Emergency In-Stream Diffused Aeration:* Simulated oxygen boost $+0.77\text{ mg/L}$; mobilization lead time $4.0\text{h}$.
+  2. *Catchment Runoff Reduction:* Simulated oxygen boost $+0.42\text{ mg/L}$; mobilization lead time $2.0\text{h}$.
+  3. *CSO Storage & Detention Basin Drawdown:* Simulated oxygen boost $+0.55\text{ mg/L}$; mobilization lead time $8.0\text{h}$.
+  4. *Riparian Canopy Shading:* Simulated oxygen boost $+0.28\text{ mg/L}$; mobilization lead time $>24.0\text{h}$.
+* **Logistical Feasibility Gate:** Compares mobilization lead time against the conservative 10th-percentile nadir deadline ($P_{10} = 6.5\text{h}$). Interventions requiring longer than $P_{10}$ are flagged as `FEASIBILITY_UNCERTAIN` or `UNLIKELY_TO_AFFECT`.
+* **Anti-Ranking Rule:** To uphold professional engineering ethics, the platform explicitly refuses to auto-rank interventions into automated "winners." Human domain experts must weigh site constraints and permitting.
+
+### 7. Citizen Field Check & Privacy Architecture
+* **Segregated Intake:** Collects volunteer sensory reports (water odor, surface scum, fish behavior) and optional handheld probe readings.
+* **Privacy Protections:** Strips EXIF metadata, redacts personally identifiable information (PII), hashes duplicate reports within 15-minute intervals, and coarsens geographic coordinates to 2 decimal places (~1.1 km).
+* **Dual-Track Ledger:** Field observations are logged into an isolated ledger for qualitative contextual verification. Under the **Anti-Labeling Rule**, field observations are strictly blocked from being used as quantitative ground-truth training labels.
+
+---
+
+## Results and Evaluation
+
+To maintain strict scientific credibility, AquaRehearsal-X rigorously separates aggregate held-out evaluation, historical event replay, scenario risk estimates, and theoretical simulation outputs:
+
+### 1. Model Evaluation Metrics
+
+| Regime / Split | Dataset & Period | Model / Architecture | Samples (N) | MAE (mg/L) | RMSE (mg/L) | $R^2$ | Within $\pm 1.0$ mg/L (%) |
+|:---|:---|:---|:---:|:---:|:---:|:---:|:---:|
+| **Initial 6-Month Test Set** | USGS 01474500 (Aug 25 – Sep 25, 2026) | Baseline A (Current DO Persistence) | 759 | 0.871 | 1.275 | -2.3315 | 67.85% |
+| **Initial 6-Month Test Set** | USGS 01474500 (Aug 25 – Sep 25, 2026) | Baseline B (Linear / Seasonal Ridge) | 760 | 3.537 | 3.599 | -25.5590 | 0.00% |
+| **Initial 6-Month Test Set** | USGS 01474500 (Aug 25 – Sep 25, 2026) | **LightGBM Regressor (Stage 2 Main ML)** | 760 | **0.662** | **0.780** | **-0.2491** | **75.53%** |
+| **Multi-Year Held-Out Test Season** | Full 2026 Season (Apr 1 – Sep 25, 2026) | Model A (Water-Only Features) | 4,264 | 1.184 | 1.536 | +0.4181 | 53.71% |
+| **Multi-Year Held-Out Test Season** | Full 2026 Season (Apr 1 – Sep 25, 2026) | Model B (Water + ECMWF ERA5 Rain) | 4,264 | 1.195 | 1.542 | +0.4132 | 53.99% |
+| **Active Storm Periods Only** | Storm windows in 2026 test season | Model A (Water-Only Features) | 570 | 0.654 | 0.752 | +0.3801 | 82.63% |
+| **Active Storm Periods Only** | Storm windows in 2026 test season | **Model B (Water + ECMWF ERA5 Rain)** | 570 | **0.651** | **0.741** | **+0.3974** | **82.81%** |
+| **Baseflow Periods Only** | Normal flow in 2026 test season | Model A (Water-Only Features) | 3,694 | 1.266 | 1.623 | +0.3903 | 49.24% |
+| **Baseflow Periods Only** | Normal flow in 2026 test season | Model B (Water + ECMWF ERA5 Rain) | 3,694 | 1.279 | 1.631 | +0.3845 | 49.54% |
+
+*Note on $R^2$ Variance Dynamics:* During the Stage 2 late-summer test period, observed dissolved oxygen was concentrated tightly between 6.0 and 8.0 mg/L ($\sigma = 0.698\text{ mg/L}$). Because the total sum of squares ($SS_{\text{tot}}$) was exceptionally small, the ratio of residual variance to target variance exceeded 1.0, rendering $R^2$ slightly negative (-0.2491) despite low absolute error ($0.662\text{ mg/L}$). In Stage 2.5, expanding the dataset across multi-year seasonal transitions restored a robust positive $R^2$ (+0.4181).
+
+### 2. Historical Event Replay (Event 54 — August 5, 2026 Severe Summer Storm)
+To evaluate operational capability under realistic emergency conditions, the system reconstructed held-out Event 54 strictly using data available at forecast issue time $t_0 = \text{2026-08-05T20:00:00Z}$:
+* **Pre-Event Environmental State:** Water Temperature $26.5^\circ\text{C}$ (summer thermal stress), Ambient DO $7.10\text{ mg/L}$, Baseflow $900\text{ cfs}$, Incoming 24h Rain $26.5\text{ mm}$ (peak intensity $5.5\text{ mm/h}$).
+* **Model B 72h Forecast:** **$6.05\text{ mg/L}$** (anticipated a deoxygenation sag of $1.05\text{ mg/L}$).
+* **Persistence Baseline:** $7.10\text{ mg/L}$ (assumed zero drop; error $1.45\text{ mg/L}$).
+* **80% Quantile Interval:** $[q_{10}, q_{90}] = [5.38, 6.72]\text{ mg/L}$ (width $1.34\text{ mg/L}$).
+* **90% Conformal Interval:** $[4.10, 8.01]\text{ mg/L}$ (calibrated margin $\pm 1.955\text{ mg/L}$).
+* **True Observed Outcome:** Minimum DO fell to **$5.65\text{ mg/L}$** at $t+10.0\text{h}$ (discharge crested at $4,910\text{ cfs}$; peak turbidity $16.8\text{ FNU}$).
+* **Forecast Accuracy:** ML absolute error was $|5.65 - 6.05| = \mathbf{0.40\text{ mg/L}}$ (a **72.4% error reduction** over persistence).
+* **Single-Event Disclaimer:** Event 54's $0.40\text{ mg/L}$ error represents an individual historical case study demonstrating the model anticipating a deoxygenation sag; it must not be conflated with aggregate multi-year model error (MAE $1.195\text{ mg/L}$).
+
+### 3. Investigation & Resolution of Specific Reported Values
+
+1. **Resolution of 21.0 mm Safe Allowance vs. 26.5 mm Rain at 14.8% Risk:**
+   - *Reported Values:* Safe rainfall boundary = $21.0\text{ mm}$ at $26.5^\circ\text{C}$; Estimated breach probability for Event 54 ($26.5\text{ mm}$ rain at $26.5^\circ\text{C}$) = $14.8\%$.
+   - *Apparent Inconsistency:* If $21.0\text{ mm}$ were the boundary where breach risk reaches the critical operational limit ($\alpha = 20\%$), then a larger storm ($26.5\text{ mm}$) exhibiting a lower risk ($14.8\%$) would violate monotonic physics.
+   - *Resolution & Verification:* In AquaRehearsal-X's operational tier architecture (`stage3_settings.py`), **$21.0\text{ mm}$ represents the conservative SAFE boundary allowance**, defined as the threshold where breach probability crosses into the **ADVISORY** zone ($P_{\text{cross}} \ge 10\%$). Because the incoming storm rainfall ($26.5\text{ mm}$) exceeds the $21.0\text{ mm}$ safe allowance, the system issues an **`ADVISORY`** alert ($P_{\text{cross}} = 14.8\%$). The risk remains below the $20\%$ critical action trigger and below the $35\%$ `WARNING` threshold, correctly reflecting that while assimilative capacity was eroded, dissolved oxygen remained above $5.0\text{ mg/L}$ (observed trough was $5.65\text{ mg/L}$). Internal code comments glossing 21.0 mm as crossing 20% risk are flagged as mislabeled documentation in legacy drafts.
+2. **Absence of Observed Dissolved Oxygen Collapses Below 5.0 mg/L:**
+   - *Catalog Reality:* Across all 58 detected storm disturbance events in the 2023–2026 multi-year record, the minimum observed storm DO was **$5.65\text{ mg/L}$** (Event 54). Zero historical events dropped below the $5.0\text{ mg/L}$ PA DEP standard.
+   - *Scientific Implication:* The Schuylkill River at Philadelphia possesses a large drainage basin (1,893 mi²) and sustained baseflow that maintains atmospheric reaeration during high-flow discharge surges. Therefore, **we do not claim empirical sensitivity to observed fish kills or regulatory collapses**. Regulatory breach curves $P(\text{DO} < 5.0)$ represent **statistically calibrated projections** derived from continuous error distributions, not an empirical cluster of ecological collapses.
+3. **Hydrologic Equivalence of Model A and Model B in Aggregate:**
+   - In aggregate over the entire 6-month test season, Model B (1.195 mg/L MAE) did not outperform Model A (1.184 mg/L MAE). In a 1,893 mi² basin, streamflow ($Q$) already physically integrates catchment-wide precipitation. Point rainfall provides measurable predictive lift specifically during active storm disturbance windows (RMSE reduced from 0.752 to 0.741 mg/L; $R^2$ increased from 0.3801 to 0.3974; 82.8% within $\pm 1.0$ mg/L).
+4. **Theoretical Status of Intervention Benefits:**
+   - The reported $+0.77\text{ mg/L}$ oxygen recovery for diffused aeration is an **idealized 1D Streeter-Phelps mass-balance simulation output**. No in-situ aeration diffuser arrays were physically deployed in the Schuylkill River.
+
+---
+
+## Interactive Web Deliverables
+
+AquaRehearsal-X provides four interactive web deliverables serialized in `data/reports/` that require zero external server infrastructure:
+
+| Deliverable | File Path | Scope & Functionality |
+|:---|:---|:---|
+| 🌟 **Stage 6 Unified Mission Control** | [`data/reports/stage6/mission_control.html`](data/reports/stage6/mission_control.html) | Master judge-ready platform: live KPIs, 72h trajectory, 2D STE canvas, 3-min guided tour, Event 54 replay, and limitations panel. |
+| **Stage 5 Field Check Dashboard** | [`data/reports/stage5/field_check_dashboard.html`](data/reports/stage5/field_check_dashboard.html) | Community ground-truthing portal with coordinate coarsening (~1.1 km), EXIF stripping, and dual-track ledger verification. |
+| **Stage 4 Intervention Rehearsal App** | [`data/reports/stage4/intervention_rehearsal_app.html`](data/reports/stage4/intervention_rehearsal_app.html) | Continuous Streeter-Phelps mass-balance solver simulating 4 archetypes with logistical feasibility gating. |
+| **Stage 3 Storm Tolerance App** | [`data/reports/stage3/storm_tolerance_envelope_app.html`](data/reports/stage3/storm_tolerance_envelope_app.html) | Interactive 2D phase-space canvas mapping thermal shrinkage and antecedent moisture envelope shifts. |
+
+---
+
+## Installation & Quick Start
 
 ### 1. Prerequisites
-- Python 3.10+ (tested on Python 3.13.2)
-- Git
+* Python 3.10, 3.11, 3.12, or 3.13 (tested on Python 3.13.2)
+* Git
 
-### 2. Clone and Setup Environment
+### 2. Clone the Repository
 ```bash
-git clone https://github.com/YourRepo/AquaRehearsal-X.git
+git clone https://github.com/Nishanth773/AquaRehearsal-X.git
 cd AquaRehearsal-X
+```
 
-# Create and activate virtual environment
+### 3. Set Up Virtual Environment
+
+**Windows (PowerShell):**
+```powershell
 python -m venv venv
-
-# Windows (PowerShell)
 .\venv\Scripts\Activate.ps1
+```
 
-# Linux / macOS
+**Linux / macOS (Bash):**
+```bash
+python3 -m venv venv
 source venv/bin/activate
 ```
 
-### 3. Install Dependencies
+### 4. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
----
+*Actual project dependencies from `requirements.txt`:* `pandas>=2.0.0`, `numpy>=1.24.0`, `requests>=2.31.0`, `matplotlib>=3.7.0`, `scipy>=1.10.0`, `pytest>=7.4.0`, `python-dateutil>=2.8.2`, `tabulate>=0.9.0`, `scikit-learn>=1.3.0`, `lightgbm>=4.0.0`.
 
-## How to Run the Pipeline and Tests
-
-### Run Automated Tests
+### 5. Run the Master Verification Suite
 ```bash
 pytest -v
 ```
-All 14 unit tests execute against labeled test fixtures, verifying:
-- USGS JSON parsing and metadata extraction
-- UTC timezone normalization and sorting
-- Duplicate timestamp resolution
-- Physical boundary violation flagging
-- Multi-scale resampling (15m, 1h, 1d)
-- Suitability scoring (`GOOD`, `WARNING`, `INSUFFICIENT`)
-- Candidate hydrologic disturbance surge detection
+*Expected Result:* **89 passed in ~34 seconds (100% pass rate)**.
 
-### Run the Master Data Pipeline
+### 6. Execute Master Orchestration Pipeline
 ```bash
-python src/pipeline.py
-```
-This executes the end-to-end scientific pipeline:
-1. Queries 8 candidate USGS stations across multiple states.
-2. Ingests raw data with full provenance and caches in `data/raw/`.
-3. Performs cleaning and boundary validation (with audit trail).
-4. Generates multi-scale resampled time series in `data/processed/`.
-5. Computes parametric, non-parametric, and seasonal statistics.
-6. Detects candidate hydrologic disturbance events.
-7. Produces 9 real-data scientific plots in `data/reports/plots/`.
-8. Generates the final foundation report `DATA_FOUNDATION_REPORT.md`.
-
----
-
-## Data Sources & Provenance Approach
-
-### Official Data Sources
-1. **USGS Instantaneous Values (IV) REST API**  
-   Endpoint: `https://waterservices.usgs.gov/nwis/iv/`  
-   Parameters audited:
-   - `00300`: Dissolved Oxygen (mg/L)
-   - `00010`: Water Temperature (°C)
-   - `00060`: Stream Discharge (cfs)
-   - `00076` / `63680`: Turbidity (NTU / FNU)
-   - `00065`: Gage Height (feet)
-2. **USGS Water Services Site Service**  
-   Endpoint: `https://waterservices.usgs.gov/nwis/site/`
-
-### Data Provenance
-Every raw response is saved **completely unchanged** in `data/raw/` wrapped with an immutable provenance payload:
-```json
-{
-  "provenance": {
-    "source": "USGS Water Services - Instantaneous Values (IV) API",
-    "retrieval_date_utc": "2026-09-28T16:10:54+00:00",
-    "station_id": "01474500",
-    "parameter_codes": ["00300", "00010", "00060", "00076", "63680", "00065"],
-    "requested_period": "P180D",
-    "api_endpoint": "https://waterservices.usgs.gov/nwis/iv/?sites=01474500&..."
-  },
-  "data": { ... }
-}
-```
-
----
-
-## Candidate Station Suitability Assessment
-
-Candidate stations were classified according to transparent, configurable numerical criteria in `src/config/settings.py`:
-- **GOOD:** DO availability $\ge 80\%$, Temperature $\ge 75\%$, Discharge $\ge 70\%$, Max continuous gap $\le 14$ days, Total observations $\ge 5,000$.
-- **WARNING:** DO availability $\ge 50\%$, Discharge $\ge 40\%$, Max continuous gap $\le 45$ days.
-- **INSUFFICIENT:** Missing DO entirely, or DO availability $< 50\%$, or missing discharge.
-
-### Findings Across Investigated Stations
-| Station ID | Station Name | Available Parameters | DO Availability | Discharge Availability | Classification |
-|---|---|---|---|---|---|
-| **01474500** | **Schuylkill River at Philadelphia, PA** | DO, Temp, Q, Turbidity, Gage Height | **99.69%** | **99.99%** | **GOOD (Recommended)** |
-| **08048000** | **W Fk Trinity Rv at Ft Worth, TX** | DO, Temp, Q, Turbidity, Gage Height | **66.23%** | **99.97%** | **WARNING (Secondary)** |
-| 01463500 | Delaware River at Trenton, NJ | DO, Temp, Q, Turbidity, Gage Height | 24.95% | 99.97% | INSUFFICIENT (DO missingness) |
-| 01646500 | Potomac River nr Wash, DC Little Falls | Q, Gage Height (DO seasonal offline) | 0.0% | 100.0% | INSUFFICIENT (DO offline) |
-| 02087500 | Neuse River near Clayton, NC | Q, Gage Height | 0.0% | 100.0% | INSUFFICIENT (No DO sensor) |
-| 01651800 | Watts Branch at Washington, DC | Temp, Q, Gage Height, Turbidity | 0.0% | 99.93% | INSUFFICIENT (No DO sensor) |
-| 01589440 | Jones Falls at Sorrento, MD | Q, Gage Height | 0.0% | 100.0% | INSUFFICIENT (No DO sensor) |
-| 01651000 | Northwest Branch Anacostia River, MD | None | 0.0% | 0.0% | INSUFFICIENT (Gage offline) |
-
----
-
-## Candidate Hydrologic Disturbance Events
-In accordance with scientific rules, events are identified strictly through observed discharge surges ($\ge 2.5\times$ rolling median and $\ge 90\text{th}$ percentile) without inventing arbitrary DO crash thresholds:
-- **16 candidate disturbance events** were discovered at USGS 01474500 across 180 days.
-- Discharge surges reached up to **9.6x baseline** (peak 6,940 cfs).
-- During summer high-temperature periods ($>25^\circ\text{C}$), runoff surges triggered post-event DO drops of up to **7.3 to 9.7 mg/L**, accompanied by turbidity surges up to **24.1 FNU**.
-
----
-
-## Limitations of Current Data
-1. **Rainfall Sensor Decoupling:** In-stream USGS gages do not measure localized precipitation. Stage 2 must co-locate radar-derived precipitation (NOAA MRMS / HRRR).
-2. **Optical Sensor Drift & Cleaning:** Turbidity and DO optical sensors experience periodic calibration drift or biofouling, documented in USGS provisional qualifier codes.
-3. **Temporal Scope:** While 180 days captures critical warm-season hypoxia risk windows, multi-year archives are necessary for multi-decadal recurrence interval statistics.
-
----
-
-## What Stage 2 Implemented (72-Hour DO Forecasting Engine)
-
-In Stage 2, AquaRehearsal-X built its first predictive component: a site-specific probabilistic short-horizon forecasting engine predicting **future minimum dissolved oxygen over the next 72 hours**.
-
-### Key Deliverables:
-1. **Target Construction:** Strictly future-window target $TARGET(t) = \min_{\tau \in (0, 72\text{h}]} \text{DO}(t + \tau)$.
-2. **Leakage-Free Features:** 144 engineered features (lags, rolling backward statistics, rate of change, Benson-Krause theoretical DO saturation, and cyclical seasonality). Proved 100% leakage-free via automated future-mutation tests.
-3. **Rigorous Chronological Validation:** Train (Apr–Jul, 2,624 obs) $\to$ Validation (Jul–Aug, 864 obs) $\to$ Test (Aug–Sep, 760 obs).
-4. **Baseline Benchmarks:** Persistence (Baseline A) and Regularized Linear/Seasonal (Baseline B).
-5. **Main ML Forecaster:** LightGBM Regressor with early stopping, outperforming Persistence by 38.8% in RMSE and 24.0% in MAE.
-6. **Uncertainty Quantification:** Pinball loss Quantile LightGBM ($q_{10}, q_{50}, q_{90}$) and Inductive Split Conformal Prediction.
-7. **Storm-Event Backtesting:** Pre-event forecasting across 16 historical candidate disturbance events.
-8. **Basic Input-Domain Warning Checker:** Automatic OOD flags for extreme excursions outside historical training bounds.
-9. **Clean Programmatic Prediction API:** `predict_min_do(input_features)`.
-
----
-
-## Stage 2 Model Performance Summary (Unseen Test Set)
-
-| Model | MAE (mg/L) | RMSE (mg/L) | $R^2$ | Median AE (mg/L) | Within $\pm 0.5$ mg/L (%) | Within $\pm 1.0$ mg/L (%) | Test Disturbance MAE |
-|:---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-| **Baseline A (Persistence: Current DO)** | 0.871 | 1.275 | -2.3315 | 0.600 | 47.17% | 67.85% | 0.940 |
-| **Baseline B (Linear: DO + Temp + Season)** | 3.537 | 3.599 | -25.5590 | 3.456 | 0.00% | 0.00% | 3.778 |
-| **LightGBM Regressor (Stage 2 Main ML)** | **0.662** | **0.780** | **-0.2491** | **0.684** | **38.42%** | **75.53%** | **1.020** |
-
-*See [`docs/STAGE2_MODEL_REPORT.md`](file:///c:/Users/Nishanth/OneDrive/Desktop/AquaRehearsal-X/docs/STAGE2_MODEL_REPORT.md) and [`docs/MODEL_CARD.md`](file:///c:/Users/Nishanth/OneDrive/Desktop/AquaRehearsal-X/docs/MODEL_CARD.md) for full scientific analysis, feature importances, and limitations.*
-
----
-
-## How to Run Stage 2 Pipeline and Tests
-
-### 1. Run Automated Test Suite (26 Unit & Integration Tests)
-```bash
-pytest -v
-```
-Verifies:
-- All 14 Stage 1 data integrity, resampling, and disturbance tests
-- Target construction and minimum future observation validation
-- Strict exclusion of current time $t$ from target window
-- Backward lag shifts and rolling window directionality
-- Rigorous leakage prevention via future-data mutation testing
-- Baseline models and LightGBM model fitting
-- Uncertainty quantile ordering and non-crossing constraints
-- Split conformal calibration
-- Basic input-domain / OOD range checking
-- Prediction API structured inference
-
-### 2. Run Stage 2 Master Pipeline
-```bash
-python src/stage2_pipeline.py
-```
-This executes the end-to-end scientific modeling workflow:
-1. Audits sensor completeness and prints data verification report.
-2. Builds 72h future minimum target and filters invalid incomplete windows.
-3. Constructs 144 causal features.
-4. Partitions data chronologically (Train $\to$ Val $\to$ Test).
-5. Fits Baseline A, Baseline B, and LightGBM.
-6. Calibrates Quantile LightGBM and Split Conformal Prediction.
-7. Computes regression metrics and test-set baseline comparison table.
-8. Executes pre-event backtests across candidate storm disturbance events.
-9. Generates 9 publication-grade figures in `data/reports/stage2/`.
-10. Saves trained models, feature lists, domain ranges, and metadata in `data/reports/stage2/models/`.
-
-### 3. Programmatic Prediction API Usage
-```python
-from src.models import predict_min_do
-
-# Provide pre-event environmental observations
-input_sample = {
-    "dissolved_oxygen": 8.2,
-    "water_temperature": 23.5,
-    "discharge": 1450.0,
-    "turbidity": 6.8,
-}
-
-forecast = predict_min_do(input_sample)
-print(forecast)
-# {
-#   'target': 'minimum_dissolved_oxygen_next_72h',
-#   'unit': 'mg/L',
-#   'point_forecast_mg_L': 6.85,
-#   'lower_bound_10th_percentile_mg_L': 5.88,
-#   'upper_bound_90th_percentile_mg_L': 7.92,
-#   'domain_warning': {'has_domain_warning': False, ...},
-#   ...
-# }
-```
-
----
-
-## Stage 2 Generated Artifacts & Reports
-
-```text
-AquaRehearsal-X/
-├── data/reports/stage2/
-│   ├── 1_actual_vs_predicted_scatter.png        # Scatter plot with 1:1 identity line
-│   ├── 2_timeseries_forecast_trajectory.png     # Chronological test forecast trajectory
-│   ├── 3_prediction_intervals_test.png          # 80% Quantile interval test series
-│   ├── 4_residual_distribution.png              # Residual histogram and normal overlay
-│   ├── 5_residuals_vs_predicted.png             # Residuals vs predictions (heteroscedasticity)
-│   ├── 6_baseline_vs_ml_comparison.png          # MAE / RMSE comparison bar chart
-│   ├── 7_feature_importance.png                 # Top 15 features by model relative gain
-│   ├── 8_disturbance_backtesting_errors.png     # Storm event backtest actual vs predicted
-│   ├── 9_interval_coverage_reliability.png      # Nominal vs observed coverage diagram
-│   ├── model_comparison_metrics.csv             # Structured model benchmark table
-│   ├── backtest_results.csv                     # Candidate storm event backtesting log
-│   ├── test_predictions.csv                     # Full test-set predictions & intervals
-│   ├── feature_importance.csv                   # All 144 feature gain/split importances
-│   └── models/
-│       ├── lgbm_regressor.joblib                # Trained LightGBM model artifact
-│       ├── lgbm_quantile_10.joblib              # 10th percentile quantile regressor
-│       ├── lgbm_quantile_50.joblib              # 50th percentile quantile regressor
-│       ├── lgbm_quantile_90.joblib              # 90th percentile quantile regressor
-│       ├── baseline_b_model.joblib              # Fitted Baseline B Ridge pipeline
-│       ├── domain_ranges.json                   # Learned training distributions for OOD checks
-│       ├── feature_list.json                    # Feature column order
-│       └── model_metadata.json                  # Training date ranges, hyperparameters, seeds
-│
-├── docs/
-│   ├── MODEL_CARD.md                            # Comprehensive model documentation
-│   ├── STAGE2_MODEL_REPORT.md                   # 23-point scientific model evaluation report
-│   ├── STAGE2_5_REPORT.md                       # Historical depth & ECMWF ERA5 precipitation report
-│   └── STAGE3_REPORT.md                         # Storm Tolerance Envelope & early-warning report
-```
-
----
-
-## What Stage 3 Implemented (Storm Tolerance Envelope & Early Warning)
-
-Stage 3 transforms our predictive 72-hour forecasting model into an operational decision-support tool by computing dynamic ecological resilience boundaries and early-warning alerts:
-
-### Key Deliverables:
-1. **Dynamic Multi-Dimensional Tolerance Envelope:** Replaces static water quality limits with a state-conditioned boundary function calculating critical rainfall ($R_{\text{crit}}$) and critical discharge surge ($Q_{\text{crit}}$) before standard violation.
-2. **Resolution of Static Calibration Deficit:** Implements **thermally stratified split-conformal uncertainty intervals** (Cold, Moderate, Warm) to capture heightened summer biological volatility.
-3. **Regulatory Boundary-Crossing Probabilities:** Derives exact non-linear exceedance probabilities:
-   - $P_{\text{cross}}(5.0\text{ mg/L})$: Standard PA DEP Warm Water Fishes daily criterion.
-   - $P_{\text{cross}}(4.0\text{ mg/L})$: Acute instantaneous minimum criterion.
-   - $P_{\text{cross}}(2.0\text{ mg/L})$: Severe ecological hypoxia / lethal fish kill limit.
-4. **Operational Action Window Latency:** Quantifies time-to-trough ($t_{\text{trough}}$) across 58 historical storm disturbances (median = 7.0h, expanding to 35h in summer heatwaves), characterizing actionable intervention lead times.
-5. **Historical Stress-Testing:** Validated across all 58 detected historical storm events (2023–2026), achieving **100% sensitivity** (0 missed regulatory hazards) and **60.3% specificity**.
-6. **Programmatic STE API:** Clean `evaluate_storm_tolerance()` interface exposing real-time risk tiers, critical thresholds, buffer margins, and out-of-distribution flags.
-7. **8 Publication Figures:** High-resolution phase-space contours, thermal shrinkage comparisons, lag distributions, and chronological case studies in `data/reports/stage3/`.
-
-### Running Pipelines & Tests
-
-```bash
-# Run Full Master Verification Suite (89 Tests Passing across Stages 1–6)
-pytest -v
-
-# Run Stage 6 Master Full System Integration Pipeline
+# Generates Mission Control report and verifies subsystem observability
 python src/stage6_pipeline.py
-
-# Run Individual Stage Pipelines (Optional)
-python src/pipeline.py          # Stage 1: Data Ingestion & Quality Foundation
-python src/stage2_pipeline.py   # Stage 2: DO Forecasting Prototype
-python src/stage2_5_pipeline.py # Stage 2.5: Historical Multi-Year + Rain Integration
-python src/stage3_pipeline.py   # Stage 3: Storm Tolerance Envelope
-python src/stage4_pipeline.py   # Stage 4: Action Window & Intervention Rehearsal
-python src/stage5_pipeline.py   # Stage 5: Field Check & Citizen Verification
 ```
 
-### Stage 6 Unified Workflow & Decision-Support Usage
+### 7. Launch Interactive Mission Control (Offline Mode)
+AquaRehearsal-X is fully self-contained. Double-click or open the generated dashboard directly in any web browser:
+```
+data/reports/stage6/mission_control.html
+```
 
+### 8. Programmatic API Usage
 ```python
-from src.integration.unified_workflow import UnifiedWorkflow
+from src.models import evaluate_storm_tolerance, predict_min_do
 
-# Initialize Master Decision Support Engine
-workflow = UnifiedWorkflow(threshold_mg_L=5.0, risk_limit=0.20)
+# 1. Evaluate 72h minimum dissolved oxygen forecast
+forecast = predict_min_do({
+    "dissolved_oxygen": 7.10,
+    "water_temperature": 26.5,
+    "discharge": 900.0,
+    "turbidity": 12.0,
+})
+print("72h Min DO Forecast:", forecast["point_forecast_mg_L"], "mg/L")
 
-# Run complete end-to-end pipeline
-result = workflow.run_full_pipeline(
-    simulated_storm_rain_mm=26.5,
-    custom_water_temp_c=26.5,
+# 2. Evaluate Storm Tolerance Envelope for an incoming 26.5 mm storm
+ste_result = evaluate_storm_tolerance(
+    current_conditions={
+        "water_temperature": 26.5,
+        "dissolved_oxygen": 7.10,
+        "discharge": 900.0,
+        "antecedent_rain_72h": 12.0,
+    },
+    incoming_storm_forecast={
+        "storm_rain_mm": 26.5,
+        "discharge_surge_ratio": 3.5,
+        "storm_duration_hours": 10.0,
+    }
 )
-
-print("Current DO:", result["stream_conditions"]["dissolved_oxygen_mg_l"], "mg/L")
-print("72h Min DO Forecast:", result["forecast_72h"]["predicted_min_do_mg_l"], "mg/L")
-print("Storm Tolerance Allowance:", result["storm_tolerance_envelope"]["safe_boundary_rainfall_allowance_mm"], "mm")
-print("Breach Risk Probability:", result["storm_tolerance_envelope"]["estimated_breach_probability"])
+print("Operational Alert Tier:", ste_result["alert_status"]["label"])
+print("Critical Rainfall Allowance (5.0 mg/L):", ste_result["tolerance_envelope"]["critical_rainfall_acute_4_0_mm"], "mm")
 ```
 
-### Interactive Web Deliverables
-- 🌟 **Stage 6 Unified Mission Control Platform:** [`data/reports/stage6/mission_control.html`](file:///c:/Users/Nishanth/OneDrive/Desktop/AquaRehearsal-X/data/reports/stage6/mission_control.html)
-- **Stage 5 Field Check Dashboard:** [`data/reports/stage5/field_check_dashboard.html`](file:///c:/Users/Nishanth/OneDrive/Desktop/AquaRehearsal-X/data/reports/stage5/field_check_dashboard.html)
-- **Stage 4 Action Window & Rehearsal Web App:** [`data/reports/stage4/intervention_rehearsal_app.html`](file:///c:/Users/Nishanth/OneDrive/Desktop/AquaRehearsal-X/data/reports/stage4/intervention_rehearsal_app.html)
-- **Stage 3 Storm Tolerance Envelope Web App:** [`data/reports/stage3/storm_tolerance_envelope_app.html`](file:///c:/Users/Nishanth/OneDrive/Desktop/AquaRehearsal-X/data/reports/stage3/storm_tolerance_envelope_app.html)
+---
 
+## Testing Suite & Evolution
+
+Across the project's development, test counts expanded systematically across phased milestones. The latest verified test run represents the complete master test suite:
+
+### Test Count Resolution Across Documentation
+* **Stage 1 (Data Foundation):** 14 unit tests (`test_usgs_client.py`, `test_cleaner.py`, `test_resampler.py`, `test_quality.py`, `test_disturbance.py`).
+* **Stage 2 (Forecasting Prototype):** 26 tests (adding `test_stage2_forecasting.py`).
+* **Stage 2.5 (Extended Multi-Year & Rain):** 35 tests (adding `test_stage2_5_extended.py`, `test_stage2_5_precipitation.py`).
+* **Stage 3 (Storm Tolerance Envelope):** 50 to 58 tests (adding `test_stage3_ste.py`, `test_stage3_modular.py`).
+* **Stage 4 (Intervention Rehearsal):** 67 tests (adding `test_stage4_rehearsal.py`).
+* **Stage 5 (Field Check & Privacy):** 77 tests (adding `test_stage5_field_check.py`).
+* **Stage 6 & 7 (Full System Integration):** **89 tests** (adding `test_stage6_integration.py`).
+
+### Latest Verified Test Suite Summary (Pytest 9.1.1, Python 3.13.2)
+```text
+tests/test_cleaner.py (3 tests) ........................................ PASSED
+tests/test_disturbance.py (1 test) ..................................... PASSED
+tests/test_quality.py (3 tests) ........................................ PASSED
+tests/test_resampler.py (4 tests) ...................................... PASSED
+tests/test_stage2_5_extended.py (4 tests) ............................... PASSED
+tests/test_stage2_5_precipitation.py (5 tests) .......................... PASSED
+tests/test_stage2_forecasting.py (12 tests) ............................. PASSED
+tests/test_stage3_modular.py (8 tests) ................................. PASSED
+tests/test_stage3_ste.py (15 tests) .................................... PASSED
+tests/test_stage4_rehearsal.py (9 tests) ................................ PASSED
+tests/test_stage5_field_check.py (10 tests) ............................ PASSED
+tests/test_stage6_integration.py (12 tests) ............................ PASSED
+tests/test_usgs_client.py (3 tests) .................................... PASSED
+
+============================= 89 passed in 34.13s =============================
+```
+
+*Scientific Integrity Note on Testing:* Automated unit and integration tests verify software correctness, future-mutation leakage prevention, mathematical monotonicity, and schema contracts. **Passing tests prove code execution correctness, NOT the physical truth of ecological projections or treatment efficacy.**
+
+---
+
+## Limitations and Scientific Integrity
+
+AquaRehearsal-X is explicitly documented with seven operational and scientific limitations:
+
+1. **Single-Station Prototype:** Calibrated exclusively on USGS `01474500` on the lower Schuylkill River. Flow dynamics in this 1,893 mi² basin do not represent steep headwater catchments or small urban streams without local recalibration.
+2. **Absence of Observed Dissolved Oxygen Breaches Below 5.0 mg/L:** Across the 58 storm disturbance events in the 2023–2026 historical record, high discharge sustained sufficient reaeration such that the lowest observed minimum DO was $5.65\text{ mg/L}$ (Event 54). Breach risk curves are statistically calibrated risk projections derived from continuous forecasting error distributions, not empirical observations of fish kills.
+3. **Empirical Rather Than Deterministic Ecological Boundaries:** The 2D envelope reflects empirical non-linear regression curves, not 3D numerical hydrodynamic water quality simulations (e.g., CE-QUAL-W2).
+4. **Theoretical Intervention Outcomes:** Simulated oxygen recoveries (e.g., $+0.77\text{ mg/L}$ for diffused aeration) are derived from 1D continuous Streeter-Phelps mass-balance equations. In-situ aeration arrays were not physically deployed in the Schuylkill River; absolute benefits have not been validated through field engineering trials.
+5. **Action-Window Uncertainty:** Time-to-nadir bounds are empirical percentiles ($P_{10} = 6.5\text{h}$, $P_{50} = 10.0\text{h}$, $P_{90} = 18.0\text{h}$) derived from historical hydrographs. They represent guidance percentiles, not a deterministic countdown clock.
+6. **Daytime Sampling Bias in Citizen Science:** Volunteer observations naturally cluster during daylight hours (08:00 to 20:00 UTC), missing pre-dawn minimum dissolved oxygen troughs (02:00 to 06:00 UTC) driven by nocturnal algal respiration.
+7. **Microbial Pathogen Decoupling (Critical One Health Boundary):** Stream appearance, turbidity, and dissolved oxygen do not determine bacterial pathogen concentrations. **Human-contact recreational risk is explicitly NOT ASSESSED without certified laboratory microbial testing (*E. coli*, *Enterococci*).**
+
+---
+
+## Future Work
+
+1. **Multi-Station Spatial Transferability:** Extend training across the multi-station USGS network throughout the Delaware River Basin to evaluate cross-catchment generalization.
+2. **Multi-Decadal Archival Ingestion:** Ingest 20+ years of historical data to capture rare 50-year and 100-year drought-storm disturbances where acute DO collapses below $4.0\text{ mg/L}$ may have occurred.
+3. **Adaptive Conformal Calibration:** Implement locally-weighted and time-adaptive conformal prediction algorithms (e.g., EnbPI) to track seasonal non-stationarity without manual regime stratification.
+4. **Field-Scale Intervention Trials:** Partner with municipal stormwater authorities to conduct tracer release and micro-bubble aeration trials in controlled stream reaches to validate empirical mass-transfer coefficients.
+5. **Hydrodynamic Model Coupling:** Couple the machine-learning early-warning layer with numerical 2D hydrodynamic models (e.g., EFDC, SWMM) for detailed longitudinal dissolved oxygen profile simulation.
+6. **Pathogen Sensor Integration:** Integrate automated grab-samplers or microfluidic qPCR sensors to assess microbial water safety alongside aquatic ecosystem health.
+
+---
+
+## Credits, Citations & Data Sources
+
+### Data Providers & Regulatory Standards
+* **United States Geological Survey (USGS):** National Water Information System (NWIS) Instantaneous Values (IV) API. Station `01474500` (Schuylkill River at Philadelphia, PA).
+* **European Centre for Medium-Range Weather Forecasts (ECMWF):** ERA5 Atmospheric Reanalysis via the Open-Meteo Historical Weather API.
+* **Commonwealth of Pennsylvania:** Pennsylvania Code Title 25, Chapter 93 (Water Quality Standards) — Warm Water Fishes (WWF) criteria.
+* **Delaware River Basin Commission (DRBC):** Water Quality Regulations for Delaware Estuary Zone 3.
+
+### Scientific Foundations & Key Literature
+* **Benson, B. B., & Krause, D. (1984):** The concentration and isotopic fractionation of oxygen dissolved in freshwater and seawater in equilibrium with the atmosphere. *Limnology and Oceanography*, 29(3), 620–632.
+* **Streeter, H. W., & Phelps, E. B. (1925):** A Study of the Pollution and Natural Purification of the Ohio River. *Public Health Bulletin No. 146*, U.S. Public Health Service.
+* **Alabaster, J. S. (1988):** The use of artificial aeration in the management of dissolved oxygen in the Thames Estuary. *Water Research*, 22(8), 983–989.
+* **Angelopoulos, A. N., & Bates, S. (2021):** A Gentle Introduction to Conformal Prediction and Distribution-Free Uncertainty Quantification. *arXiv:2107.07511*.
+* **Ke, G., et al. (2017):** LightGBM: A Highly Efficient Gradient Boosting Decision Tree. *Advances in Neural Information Processing Systems (NeurIPS 2017)*.
+
+---
+
+## Scientific Integrity & Zero-Fabrication Mandate
+
+In strict accordance with the OneAquaHealth Global Hackathon rules:
+* Every baseline measurement, discharge rate, water temperature, and rainfall observation is derived from verified USGS NWIS and ECMWF ERA5 records.
+* No synthetic observations are injected into scientific training sets; synthetic test fixtures exist exclusively inside automated unit test suites (`tests/`).
+* Missing sensor telemetry and meteorological data are preserved as NaN, with zero silent imputation.
+* All limitations, historical event minimums, and theoretical simulation bounds are fully disclosed.
