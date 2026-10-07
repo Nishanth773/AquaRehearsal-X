@@ -291,7 +291,7 @@ AquaRehearsal-X is fully configured for zero-configuration, public hosting on **
 
 * **Static Architecture:** All interactive tools run client-side in standard ECMAScript 2020+. Scientific numerical solvers (continuous Streeter-Phelps ordinary differential equations, Monte Carlo quantile interpolation, coordinate fuzzing, and telemetry visualization) run entirely in the user's web browser with zero server latency.
 * **Asset Integrity:** All fonts and script libraries (Google Fonts `Outfit`, `Inter`, `JetBrains Mono`; `Plotly.js 2.35.2`) are served via high-availability HTTPS CDNs or compiled natively into HTML5 canvas drawings.
-* **Relative Path Portability:** All internal navigation between `index.html` and `data/reports/stage*/...` utilizes verified relative paths, ensuring full operational capability regardless of whether hosted at the domain root (`http://localhost:8000/`) or under a GitHub repository sub-path (`https://<username>.github.io/<repository-name>/`).
+* **Relative Path Portability:** All internal navigation between `index.html` and `data/reports/stage*/...` utilizes verified relative paths, ensuring full operational capability regardless of whether hosted at the custom domain root or under the GitHub repository sub-path (`https://nishanth773.github.io/AquaRehearsal-X/`).
 * **Jekyll Bypass:** A root `.nojekyll` file is included to prevent GitHub Pages' Jekyll processor from suppressing subfolders.
 
 > [!NOTE]
