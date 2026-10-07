@@ -14,8 +14,10 @@
 AquaRehearsal-X is an open-source, uncertainty-aware decision-support platform designed to help watershed managers, municipal authorities, and environmental response teams anticipate and rehearse responses to acute dissolved oxygen (DO) depletion in urban freshwater streams before storm disturbance occurs. By uniting continuous stream telemetry from the United States Geological Survey (USGS), authoritative hourly meteorological reanalysis from ECMWF ERA5, leakage-free machine-learning forecasting, empirical hydrodynamic response latency distributions, and continuous Streeter-Phelps intervention mass-balance simulation, the platform translates raw environmental data into an operational **Storm Tolerance Envelope (STE)**. Rather than monitoring ecological degradation retrospectively, AquaRehearsal-X enables proactive scenario rehearsal within calibrated logistical lead times.
 
 * **GitHub Repository:** [https://github.com/Nishanth773/AquaRehearsal-X](https://github.com/Nishanth773/AquaRehearsal-X)  
+* **Live Deployment (GitHub Pages):** [https://nishanth773.github.io/AquaRehearsal-X/](https://nishanth773.github.io/AquaRehearsal-X/)  
+* **Unified Mission Control Dashboard:** [`index.html`](index.html) (Root GitHub Pages entrypoint)  
 * **Target Monitoring Station:** USGS `01474500` (Schuylkill River at Philadelphia, PA; 1,893 mi² drainage basin)  
-* **Primary Interactive Interface:** Standalone offline Mission Control platform at [`data/reports/stage6/mission_control.html`](data/reports/stage6/mission_control.html)
+* **Stage 6 Deliverable:** Standalone offline Mission Control platform at [`data/reports/stage6/mission_control.html`](data/reports/stage6/mission_control.html)
 
 ---
 
@@ -269,14 +271,60 @@ To evaluate operational capability under realistic emergency conditions, the sys
 
 ## Interactive Web Deliverables
 
-AquaRehearsal-X provides four interactive web deliverables serialized in `data/reports/` that require zero external server infrastructure:
+AquaRehearsal-X provides a unified Mission Control platform and dedicated sub-module applications serialized in `data/reports/` and served at root `index.html`. All interfaces are 100% client-side, self-contained, and require zero external backend server infrastructure:
 
 | Deliverable | File Path | Scope & Functionality |
 |:---|:---|:---|
-| 🌟 **Stage 6 Unified Mission Control** | [`data/reports/stage6/mission_control.html`](data/reports/stage6/mission_control.html) | Master judge-ready platform: live KPIs, 72h trajectory, 2D STE canvas, 3-min guided tour, Event 54 replay, and limitations panel. |
+| 🌐 **Unified Mission Control (Root Entrypoint)** | [`index.html`](index.html) | **Primary Public & GitHub Pages Entrypoint:** Complete judge-ready Mission Control platform with live KPIs, 72h forecast trajectory, 2D STE phase-space canvas, interactive scenario rehearsal, Event 54 historical storm replay, 3-min guided walkthrough, and deep-dive sub-module navigation. |
+| 🌟 **Stage 6 Mission Control Platform** | [`data/reports/stage6/mission_control.html`](data/reports/stage6/mission_control.html) | Stage 6 pipeline report build: identical full-featured Mission Control interface with relative links to all upstream stage artifacts. |
 | **Stage 5 Field Check Dashboard** | [`data/reports/stage5/field_check_dashboard.html`](data/reports/stage5/field_check_dashboard.html) | Community ground-truthing portal with coordinate coarsening (~1.1 km), EXIF stripping, and dual-track ledger verification. |
 | **Stage 4 Intervention Rehearsal App** | [`data/reports/stage4/intervention_rehearsal_app.html`](data/reports/stage4/intervention_rehearsal_app.html) | Continuous Streeter-Phelps mass-balance solver simulating 4 archetypes with logistical feasibility gating. |
 | **Stage 3 Storm Tolerance App** | [`data/reports/stage3/storm_tolerance_envelope_app.html`](data/reports/stage3/storm_tolerance_envelope_app.html) | Interactive 2D phase-space canvas mapping thermal shrinkage and antecedent moisture envelope shifts. |
+
+---
+
+## Public Deployment via GitHub Pages
+
+AquaRehearsal-X is fully configured for zero-configuration, public hosting on **GitHub Pages**.
+
+### Deployment Architecture & Compatibility Analysis
+
+* **Static Architecture:** All interactive tools run client-side in standard ECMAScript 2020+. Scientific numerical solvers (continuous Streeter-Phelps ordinary differential equations, Monte Carlo quantile interpolation, coordinate fuzzing, and telemetry visualization) run entirely in the user's web browser with zero server latency.
+* **Asset Integrity:** All fonts and script libraries (Google Fonts `Outfit`, `Inter`, `JetBrains Mono`; `Plotly.js 2.35.2`) are served via high-availability HTTPS CDNs or compiled natively into HTML5 canvas drawings.
+* **Relative Path Portability:** All internal navigation between `index.html` and `data/reports/stage*/...` utilizes verified relative paths, ensuring full operational capability regardless of whether hosted at the domain root (`http://localhost:8000/`) or under a GitHub repository sub-path (`https://<username>.github.io/<repository-name>/`).
+* **Jekyll Bypass:** A root `.nojekyll` file is included to prevent GitHub Pages' Jekyll processor from suppressing subfolders.
+
+> [!NOTE]
+> **Backend Functionality Boundary on GitHub Pages:**  
+> GitHub Pages is a purely static host and cannot execute server-side Python processes (such as live USGS NWIS REST fetching or retraining LightGBM). However:
+> 1. All baseline telemetry, 58 historical storm events, and forecast outputs are statically serialized into the client-side JavaScript engine.
+> 2. Citizen science observations submitted in the browser update the local reactive DOM ledger and storage.
+> 3. To update the underlying stream conditions or machine-learning forecasts, run `python src/stage6_pipeline.py` locally or trigger the scheduled GitHub Actions pipeline, which will regenerate and push updated static assets.
+
+### How to Deploy to GitHub Pages
+
+#### Option A: Deploy Directly from Branch (Recommended — Instant Setup)
+1. Push all project files to your GitHub repository:
+   ```bash
+   git add .
+   git commit -m "feat: prepare AquaRehearsal-X for GitHub Pages public deployment"
+   git push origin main
+   ```
+2. Navigate to your repository on GitHub: **`https://github.com/Nishanth773/AquaRehearsal-X`**.
+3. Go to **Settings** → **Pages** (in the left sidebar under *Code and automation*).
+4. Under **Build and deployment**:
+   * **Source:** Select `Deploy from a branch`
+   * **Branch:** Select `main`
+   * **Folder:** Select `/ (root)`
+5. Click **Save**.
+6. Within 1–2 minutes, GitHub will publish your site at:
+   **`https://nishanth773.github.io/AquaRehearsal-X/`**
+
+#### Option B: Deploy via GitHub Actions Workflow
+The repository includes a ready-to-run GitHub Actions workflow in [`.github/workflows/deploy-pages.yml`](.github/workflows/deploy-pages.yml).
+1. Go to repository **Settings** → **Pages**.
+2. Under **Build and deployment** → **Source**, select **GitHub Actions**.
+3. Every push to `main` (or manual dispatch via the *Actions* tab) will automatically validate and deploy the site.
 
 ---
 

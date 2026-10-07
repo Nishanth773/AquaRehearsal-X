@@ -240,7 +240,8 @@ class FieldDashboardBuilder:
         Citizen Observation & Prediction Verification Platform | Schuylkill River Watershed (USGS 01474500 Reach)
       </p>
     </div>
-    <div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <a href="../../../index.html" style="color: #38bdf8; text-decoration: none; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; background: rgba(56, 189, 248, 0.12); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 6px; transition: all 0.2s;">← Return to Mission Control</a>
       <span class="badge badge-verified">Citizen Science & Model QA</span>
     </div>
   </div>

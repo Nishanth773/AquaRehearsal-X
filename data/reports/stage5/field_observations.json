@@ -854,5 +854,185 @@
     },
     "verification_status": "PENDING_REVIEW",
     "review_audit_trail": []
+  },
+  {
+    "observation_id": "TEST-INT-001",
+    "timestamp_utc": "2026-08-06T14:00:00Z",
+    "observer_handle": "Observer-753D",
+    "is_synthetic_demonstration": true,
+    "location": {
+      "stream_name": "Schuylkill River",
+      "reach_description": "Near Walnut St Pier",
+      "exact_latitude": 39.953245,
+      "exact_longitude": -75.181234,
+      "public_coarse_latitude": 39.95,
+      "public_coarse_longitude": -75.18,
+      "distance_to_usgs_gage_km": 1.73,
+      "nearest_station_id": "01474500"
+    },
+    "direct_observation": {
+      "water_appearance": "turbid_muddy",
+      "unusual_foam": "trace",
+      "unusual_odor": "none",
+      "aquatic_life_status": "normal_fish_activity",
+      "visible_discoloration": "none",
+      "recent_weather": "heavy_rain",
+      "photo_filename": null
+    },
+    "interpretation": {
+      "perceived_stream_condition": "moderate",
+      "suspected_cause": null,
+      "confidence_level": "medium",
+      "observer_notes": "Volunteer contact: [EMAIL REDACTED], phone [PHONE REDACTED]. High water."
+    },
+    "measurement": {
+      "dissolved_oxygen_mg_L": null,
+      "water_temperature_c": null,
+      "ph": null,
+      "specific_conductance_us_cm": null,
+      "instrument_type": null,
+      "probe_calibrated_recently": false,
+      "measurement_notes": null
+    },
+    "laboratory": {
+      "is_certified_lab": false,
+      "lab_name": null,
+      "certified_do_mg_L": null,
+      "biochemical_oxygen_demand_mg_L": null,
+      "e_coli_mpn_per_100ml": null,
+      "sample_collection_time": null,
+      "chain_of_custody_id": null
+    },
+    "prediction_match": {
+      "matched_forecast_id": null,
+      "forecast_issue_time": null,
+      "forecast_min_do_mg_L": null,
+      "forecast_risk_probability": null,
+      "time_delta_hours": null,
+      "corroboration_status": "INCONCLUSIVE_OR_CONTEXTUAL_ONLY",
+      "corroboration_explanation": "No compatible forecast event within spatial-temporal matching tolerance."
+    },
+    "verification_status": "PENDING_REVIEW",
+    "review_audit_trail": []
+  },
+  {
+    "observation_id": "TEST-INT-001",
+    "timestamp_utc": "2026-08-06T14:00:00Z",
+    "observer_handle": "Observer-753D",
+    "is_synthetic_demonstration": true,
+    "location": {
+      "stream_name": "Schuylkill River",
+      "reach_description": "Near Walnut St Pier",
+      "exact_latitude": 39.953245,
+      "exact_longitude": -75.181234,
+      "public_coarse_latitude": 39.95,
+      "public_coarse_longitude": -75.18,
+      "distance_to_usgs_gage_km": 1.73,
+      "nearest_station_id": "01474500"
+    },
+    "direct_observation": {
+      "water_appearance": "turbid_muddy",
+      "unusual_foam": "trace",
+      "unusual_odor": "none",
+      "aquatic_life_status": "normal_fish_activity",
+      "visible_discoloration": "none",
+      "recent_weather": "heavy_rain",
+      "photo_filename": null
+    },
+    "interpretation": {
+      "perceived_stream_condition": "moderate",
+      "suspected_cause": null,
+      "confidence_level": "medium",
+      "observer_notes": "Volunteer contact: [EMAIL REDACTED], phone [PHONE REDACTED]. High water."
+    },
+    "measurement": {
+      "dissolved_oxygen_mg_L": null,
+      "water_temperature_c": null,
+      "ph": null,
+      "specific_conductance_us_cm": null,
+      "instrument_type": null,
+      "probe_calibrated_recently": false,
+      "measurement_notes": null
+    },
+    "laboratory": {
+      "is_certified_lab": false,
+      "lab_name": null,
+      "certified_do_mg_L": null,
+      "biochemical_oxygen_demand_mg_L": null,
+      "e_coli_mpn_per_100ml": null,
+      "sample_collection_time": null,
+      "chain_of_custody_id": null
+    },
+    "prediction_match": {
+      "matched_forecast_id": null,
+      "forecast_issue_time": null,
+      "forecast_min_do_mg_L": null,
+      "forecast_risk_probability": null,
+      "time_delta_hours": null,
+      "corroboration_status": "INCONCLUSIVE_OR_CONTEXTUAL_ONLY",
+      "corroboration_explanation": "No compatible forecast event within spatial-temporal matching tolerance."
+    },
+    "verification_status": "PENDING_REVIEW",
+    "review_audit_trail": []
+  },
+  {
+    "observation_id": "TEST-INT-001",
+    "timestamp_utc": "2026-08-06T14:00:00Z",
+    "observer_handle": "Observer-753D",
+    "is_synthetic_demonstration": true,
+    "location": {
+      "stream_name": "Schuylkill River",
+      "reach_description": "Near Walnut St Pier",
+      "exact_latitude": 39.953245,
+      "exact_longitude": -75.181234,
+      "public_coarse_latitude": 39.95,
+      "public_coarse_longitude": -75.18,
+      "distance_to_usgs_gage_km": 1.73,
+      "nearest_station_id": "01474500"
+    },
+    "direct_observation": {
+      "water_appearance": "turbid_muddy",
+      "unusual_foam": "trace",
+      "unusual_odor": "none",
+      "aquatic_life_status": "normal_fish_activity",
+      "visible_discoloration": "none",
+      "recent_weather": "heavy_rain",
+      "photo_filename": null
+    },
+    "interpretation": {
+      "perceived_stream_condition": "moderate",
+      "suspected_cause": null,
+      "confidence_level": "medium",
+      "observer_notes": "Volunteer contact: [EMAIL REDACTED], phone [PHONE REDACTED]. High water."
+    },
+    "measurement": {
+      "dissolved_oxygen_mg_L": null,
+      "water_temperature_c": null,
+      "ph": null,
+      "specific_conductance_us_cm": null,
+      "instrument_type": null,
+      "probe_calibrated_recently": false,
+      "measurement_notes": null
+    },
+    "laboratory": {
+      "is_certified_lab": false,
+      "lab_name": null,
+      "certified_do_mg_L": null,
+      "biochemical_oxygen_demand_mg_L": null,
+      "e_coli_mpn_per_100ml": null,
+      "sample_collection_time": null,
+      "chain_of_custody_id": null
+    },
+    "prediction_match": {
+      "matched_forecast_id": null,
+      "forecast_issue_time": null,
+      "forecast_min_do_mg_L": null,
+      "forecast_risk_probability": null,
+      "time_delta_hours": null,
+      "corroboration_status": "INCONCLUSIVE_OR_CONTEXTUAL_ONLY",
+      "corroboration_explanation": "No compatible forecast event within spatial-temporal matching tolerance."
+    },
+    "verification_status": "PENDING_REVIEW",
+    "review_audit_trail": []
   }
 ]

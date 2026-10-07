@@ -1,7 +1,7 @@
 {
   "stage": 6,
   "title": "Unified One Health Decision-Support Platform",
-  "generation_timestamp_utc": "2026-10-03T11:43:51.521512+00:00",
+  "generation_timestamp_utc": "2026-10-04T08:03:22.794031+00:00",
   "station": {
     "station_id": "01474500",
     "station_name": "USGS 01474500 \u2014 Schuylkill River at Philadelphia, PA",
@@ -93,9 +93,9 @@
     },
     "field_check_connectivity": {
       "status": "Available with limitations",
-      "message": "Field Check repository active (12 records). Limitation: Reports clustered in daylight hours; unverified until reviewed.",
+      "message": "Field Check repository active (14 records). Limitation: Reports clustered in daylight hours; unverified until reviewed.",
       "details": {
-        "records_count": 12,
+        "records_count": 14,
         "privacy_coarsening": "2 decimals (~1.1 km)",
         "exif_stripping": "Active"
       }
@@ -226,7 +226,7 @@
   },
   "workflow_snapshot": {
     "system_status": "OPERATIONAL",
-    "workflow_timestamp_utc": "2026-10-03T11:43:50.916020+00:00",
+    "workflow_timestamp_utc": "2026-10-04T08:03:22.122697+00:00",
     "stream_conditions": {
       "status": "VALID",
       "station_id": "01474500",
@@ -243,7 +243,7 @@
     },
     "forecast_72h": {
       "status": "VALID",
-      "forecast_id": "FC-202610031143-01474500",
+      "forecast_id": "FC-202610040803-01474500",
       "forecast_issue_utc": "2026-09-29 03:00:00+00:00",
       "forecast_horizon_end_utc": "2026-10-02T03:00:00+00:00",
       "target_definition": "Minimum hourly DO occurring strictly in (t0, t0 + 72 hours]",
@@ -907,21 +907,21 @@
       "scientific_disclaimer": "Simulated intervention outcomes represent exploratory scenario rehearsals based on idealized mass-balance kinetics and do NOT constitute measured real-world treatment effects."
     },
     "field_check_validation": {
-      "total_observations": 12,
+      "total_observations": 14,
       "verified_count": 2,
-      "unverified_pending_count": 10,
+      "unverified_pending_count": 12,
       "corroborated_count": 2,
       "contradicted_count": 0,
-      "inconclusive_count": 10,
-      "corroboration_rate_pct": 16.7,
+      "inconclusive_count": 12,
+      "corroboration_rate_pct": 14.3,
       "status_breakdown": {
         "VERIFIED": 2,
-        "PENDING_REVIEW": 10
+        "PENDING_REVIEW": 12
       },
       "corroboration_breakdown": {
         "CORROBORATES_PREDICTED_RISK": 1,
         "CORROBORATES_PREDICTED_SAFE": 1,
-        "INCONCLUSIVE_OR_CONTEXTUAL_ONLY": 10
+        "INCONCLUSIVE_OR_CONTEXTUAL_ONLY": 12
       }
     },
     "provenance": {
